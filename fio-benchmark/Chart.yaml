@@ -1,0 +1,5 @@
+apiVersion: v2
+name: fio-benchmark
+description: A Helm chart to run customized fio benchmarks
+type: application
+version: 0.1.0

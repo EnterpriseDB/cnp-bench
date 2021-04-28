@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fio
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: fio
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: fio
+        image: wallnerryan/fiotools-aio
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: job
+          mountPath: /jobs
+        env:
+          - name: JOBFILES
+            value: /jobs/job.fio
+          - name: PLOTNAME
+            value: job
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 10
+      # Don't run the a pod on a node that is running another fio benchmark
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - fio
+      nodeSelector:
+        {{- range $key, $val := .Values.nodeSelector }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}
+      - name: job
+        configMap:
+          name: {{ .Release.Name }}
+          items:
+          - key: job
+            path: job.fio

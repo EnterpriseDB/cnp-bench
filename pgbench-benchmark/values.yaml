@@ -1,0 +1,45 @@
+# namespace -- The namespace where the benchmark resources are generated.
+namespace: default
+# cnpInstances -- The amount of PostgreSQL instances in the CNP Cluster.
+cnpInstances: 1
+# cnpStorageClass -- The storage class used to create PVCs for CNP instances.
+cnpStorageClass: default
+# cnpSize -- The size of the PVCs used by CNP instances.
+cnpSize: 1Gi
+# cnpImage -- The PostgreSQL image used by CNP and PgBench.
+cnpImage: quay.io/enterprisedb/postgresql:13.2
+# cnpNodeSelector -- Dictionary of key-value pairs used to define the nodes
+# where the cluster instances can run; used to avoid pgbench and PostgreSQL
+# running on the same node.
+cnpNodeSelector:
+  workload: postgresql
+# cnpPostgreSQLParameters -- Dictionary of key-value pairs representing
+# PostgreSQL configuration.
+cnpPostgreSQLParameters:
+  shared_buffers: '512MB'
+  maintenance_work_mem: '128MB'
+  log_checkpoints: "on"
+  log_line_prefix: '%m [%p]: u=[%u] db=[%d] app=[%a] c=[%h] s=[%c:%l] tx=[%v:%x] '
+  log_lock_waits: "on"
+  log_min_duration_statement: '1000'
+  log_statement: 'ddl'
+  log_temp_files: '1024'
+  log_autovacuum_min_duration: '1s'
+# pgbenchNodeSelector -- Dictionary of key-value pairs used to define the nodes
+# where the pgbench pod can run; used to avoid pgbench and PostgreSQL
+# running on the same node.
+pgbenchNodeSelector:
+  workload: pgbench
+# pgbenchScaleFactor -- Scale factor used to initialize pgbench.
+pgbenchScaleFactor: 1
+# pgbenchTime -- The amount of seconds the pgbench will run for.
+pgbenchTime: 60
+# pgbenchClients -- The number of clients used by pgbench.
+pgbenchClients: 1
+# pgbenchJobs -- The number of jobs used by pgbench.
+pgbenchJobs: 1
+# pgbenchWarmTime -- If >0, run an initContainer that runs pgbench for the
+# defined amount of time (using the -T option) with the same clients and jobs
+# that will be used for the main pgbench run; can be useful with storage classes
+# that allow I/O bursts where could affect the actual benchmark result.
+pgbenchWarmTime: 0

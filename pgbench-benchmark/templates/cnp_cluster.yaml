@@ -1,0 +1,20 @@
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  instances: {{ .Values.cnpInstances}}
+  postgresql:
+    parameters:
+      {{- range $key, $val := .Values.cnpPostgreSQLParameters }}
+      {{ $key }}: {{ $val | quote }}
+      {{- end }}
+  affinity:
+    nodeSelector:
+      {{- range $key, $val := .Values.cnpNodeSelector }}
+      {{ $key }}: {{ $val | quote }}
+      {{- end }}
+  storage:
+    storageClass: {{ .Values.cnpStorageClass }}
+    size: {{ .Values.cnpSize }}

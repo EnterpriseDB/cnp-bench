@@ -1,0 +1,105 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-pgbench
+  namespace: {{ .Values.namespace }}
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-cnp
+        image: {{ .Values.cnpImage }}
+        env:
+        - name: PGHOST
+          value: {{ .Release.Name }}-rw
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: username
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: password
+        command:
+        - sh
+        - -c
+        - until psql -c "SELECT 1"; do echo "Waiting for {{ .Release.Name }}-rw"; sleep 2; done
+      - name: pgbench-init
+        image: {{ .Values.cnpImage }}
+        env:
+        - name: PGHOST
+          value: {{ .Release.Name }}-rw
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: username
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: password
+        command:
+        - pgbench
+        args:
+        - -i
+        - -s
+        - {{ .Values.pgbenchScaleFactor | quote }}
+      {{- if and ( .Values.pgbenchWarmTime ) ( ne ( .Values.pgbenchWarmTime | quote ) "0" )}}
+      - name: pgbench-warm
+        image: {{ .Values.cnpImage }}
+        env:
+        - name: PGHOST
+          value: {{ .Release.Name }}-rw
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: username
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: password
+        command:
+        - pgbench
+        args:
+        - -T
+        - {{ .Values.pgbenchWarmTime | quote }}
+        - -c 
+        - {{ .Values.pgbenchClients | quote }}
+        - -j 
+        - {{ .Values.pgbenchJobs | quote }}
+      {{- end }}
+      containers:
+      - name: pgbench
+        image: {{ .Values.cnpImage }}
+        env:
+        - name: PGHOST
+          value: {{ .Release.Name }}-rw
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: username
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name}}-app
+              key: password
+        command:
+        - pgbench
+        args:
+        - -T
+        - {{ .Values.pgbenchTime | quote }}
+        - -c 
+        - {{ .Values.pgbenchClients | quote }}
+        - -j 
+        - {{ .Values.pgbenchJobs | quote }}
+      restartPolicy: Never
+      nodeSelector:
+        {{- range $key, $val := .Values.pgbenchNodeSelector }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+data:
+  job: |
+    [{{ .Values.jobRW }}]
+    direct={{ .Values.jobDirect }}
+    bs={{ .Values.jobBs }}
+    size={{ .Values.jobSize }}
+    time_based={{ .Values.jobTimeBased }}
+    runtime={{ .Values.jobRuntime }}
+    ioengine={{ .Values.jobIoengine }}
+    iodepth={{ .Values.jobIodepth }}
+    end_fsync={{ .Values.jobEndFsync }}
+    log_avg_msec={{ .Values.jobLogAvgMsec }}
+    directory=/data
+    rw={{ .Values.jobRW }}
+    write_bw_log={{ .Values.jobRW }}
+    write_lat_log={{ .Values.jobRW }}
+    write_iops_log={{ .Values.jobRW }}

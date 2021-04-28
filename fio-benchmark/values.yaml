@@ -1,0 +1,29 @@
+# namespace -- The namespace in which the resources will be created.
+namespace: default
+# pvcStorageClassName -- The storage class to use to create the PVC to test.
+pvcStorageClassName: default
+# pvcSize -- The size of the PVC to be test.
+pvcSize: 2Gi
+# nodeSelector -- A key/value dictionary used to schedule the benchmark on 
+# defined nodes. 
+nodeSelector: {}
+# jobRW -- See fio rw parameter.
+jobRW: read
+# jobBs -- See fio bs parameter.
+jobBs: 8k
+# jobRuntime -- See fio runtime parameter.
+jobRuntime: 60
+# jobTimeBased -- See fio time_based parameter.
+jobTimeBased: 1
+# jobSize -- See fio size parameter.
+jobSize: 1G
+# jobIodepth -- See fio iodepth parameter.
+jobIodepth: 32
+# jobDirect -- See fio direct parameter.
+jobDirect: 1
+# jobIoengine -- See fio ioengine parameter.
+jobIoengine: libaio
+# jobEndFsync -- See fio end_fsync parameter.
+jobEndFsync: 1
+# jobLogAvgMsec -- See fio log_avg_msec parameter.
+jobLogAvgMsec: 1000

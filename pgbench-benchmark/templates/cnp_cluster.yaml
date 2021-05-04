@@ -2,7 +2,7 @@ apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Cluster
 metadata:
   name: {{ .Release.Name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   instances: {{ .Values.cnpInstances}}
   postgresql:

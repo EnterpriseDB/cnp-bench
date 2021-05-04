@@ -4,4 +4,3 @@ description: Create a CNP cluster and expose it using a LoadBalancer. Used to
   test CNP from an external application.
 type: application
 version: 0.1.0
-

@@ -8,15 +8,15 @@ metadata:
 spec:
   instances: {{ .Values.cnpInstances}}
   postgresql:
+    {{- with .Values.cnpPostgreSQLParameters }}
     parameters:
-      {{- range $key, $val := .Values.cnpPostgreSQLParameters }}
-      {{ $key }}: {{ $val | quote }}
-      {{- end }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   affinity:
+    {{- with .Values.cnpNodeSelector }}
     nodeSelector:
-      {{- range $key, $val := .Values.cnpNodeSelector }}
-      {{ $key }}: {{ $val | quote }}
-      {{- end }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   storage:
     storageClass: {{ .Values.cnpStorageClass }}
     size: {{ .Values.cnpSize }}

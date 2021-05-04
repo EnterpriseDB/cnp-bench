@@ -48,10 +48,10 @@ spec:
                 operator: In
                 values:
                 - fio
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- range $key, $val := .Values.nodeSelector }}
-        {{ $key }}: {{ $val | quote }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       - name: data
         persistentVolumeClaim:

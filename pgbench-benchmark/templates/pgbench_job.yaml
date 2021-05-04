@@ -101,7 +101,7 @@ spec:
         - -j 
         - {{ .Values.pgbenchJobs | quote }}
       restartPolicy: Never
+      {{- with .Values.pgbenchNodeSelector }}
       nodeSelector:
-        {{- range $key, $val := .Values.pgbenchNodeSelector }}
-        {{ $key }}: {{ $val | quote }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

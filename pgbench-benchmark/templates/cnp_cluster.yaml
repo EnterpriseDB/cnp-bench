@@ -1,8 +1,10 @@
 apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Cluster
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "pgbench-benchmark.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "pgbench-benchmark.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.cnpInstances}}
   postgresql:

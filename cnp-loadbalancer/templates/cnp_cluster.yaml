@@ -1,8 +1,10 @@
 apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Cluster
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "cnp-loadbalancer.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cnp-loadbalancer.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.instances}}
   postgresql:

@@ -1,0 +1,17 @@
+{{- if .Values.nodeSelector }}
+Make sure at least a node has the following labels to be able to schedule the
+{{ include "cnp-loadbalancer.fullname" . }} CNP cluster:
+{{- toYaml .Values.nodeSelector | nindent 2}}
+{{- end }}
+
+You can find the password for the `app` user running
+
+  kubectl get secrets -n {{ .Release.Namespace }} {{ include "cnp-loadbalancer.fullname" . }}-app -o jsonpath='{.data.password}' | tr -d '\n' | base64 -d
+
+and the external IP of the load balancer with
+
+  kubectl get services -n {{ .Release.Namespace }} {{ include "cnp-loadbalancer.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+
+To uninstall the chart:
+
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}

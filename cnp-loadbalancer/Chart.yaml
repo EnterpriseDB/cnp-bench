@@ -4,3 +4,6 @@ description: Create a CNP cluster and expose it using a LoadBalancer. Used to
   test CNP from an external application.
 type: application
 version: 0.1.0
+home: https://github.com/EnterpriseDB/cnp-bench/
+sources:
+  - https://github.com/EnterpriseDB/cnp-bench/

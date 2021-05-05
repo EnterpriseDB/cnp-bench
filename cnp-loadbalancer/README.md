@@ -4,13 +4,18 @@
 
 Create a CNP cluster and expose it using a LoadBalancer. Used to test CNP from an external application.
 
+**Homepage:** <https://github.com/EnterpriseDB/cnp-bench/>
+
+## Source Code
+
+* <https://github.com/EnterpriseDB/cnp-bench/>
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
 | instances | int | `1` |  |
-| namespace | string | `"default"` | The namespace where the benchmark resources are generated. |
 | nodeSelector.workload | string | `"postgresql"` |  |
 | postgreSQLParameters | object | `{"log_autovacuum_min_duration":"1s","log_checkpoints":"on","log_line_prefix":"%m [%p]: u=[%u] db=[%d] app=[%a] c=[%h] s=[%c:%l] tx=[%v:%x] ","log_lock_waits":"on","log_min_duration_statement":"1000","log_statement":"ddl","log_temp_files":"1024","maintenance_work_mem":"128MB","shared_buffers":"512MB"}` | Dictionary of key-value pairs representing PostgreSQL configuration. |
 | size | string | `"1Gi"` | The size of the PVCs used by CNP instances. |

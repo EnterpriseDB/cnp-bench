@@ -2,8 +2,8 @@
 
 `cnp-bench` provides a set of guidelines for benchmarking
 [Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) by
-[EDB](https://enterprisedb.com/) in a controlled environment, prior to
-the deployment of the database in production.
+[EDB](https://enterprisedb.com/) in a controlled environment before
+deploying the database in production.
 Cloud Native PostgreSQL is a Kubernetes operator for
 [PostgreSQL](https://www.postgresql.org/) and
 [EDB Postgres Advanced](https://www.enterprisedb.com/products/edb-postgres-advanced-server-secure-ha-oracle-compatible).
@@ -15,14 +15,14 @@ workloads/applications that run in the same shared environment.
 
 Benchmarking is focused on two aspects:
 
-- the storage, which is one of the most critical component for PostgreSQL, by relying on `fio`
+- the storage, which is one of the most critical components for PostgreSQL, by relying on `fio`
 - the database itself, by relying on `pgbench`, PostgreSQL's default benchmarking application
 
 `cnp-bench` comprises Helm charts for common benchmarking scenarios:
 
 * Running fio inside Kubernetes on a user-defined storage class;
-* Setting up an user-defined CNP cluster and running a pgbench job on it;
-* Setting up a CNP cluster and exposing it via a LoadBalancer, to allow
+* Setting up a user-defined CNP cluster and running a pgbench job on it;
+* Setting up a CNP cluster and exposing it via a LoadBalancer allows
   testing CNP from an external location (for example a VM outside Kubernetes).
 
 ## Requirements

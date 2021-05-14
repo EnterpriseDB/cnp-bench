@@ -3,3 +3,6 @@ name: fio-benchmark
 description: A Helm chart to run customized fio benchmarks
 type: application
 version: 0.1.0
+home: https://github.com/EnterpriseDB/cnp-bench/
+sources:
+  - https://github.com/EnterpriseDB/cnp-bench/

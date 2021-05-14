@@ -1,5 +1,3 @@
-# namespace -- The namespace in which the resources will be created.
-namespace: default
 # pvcStorageClassName -- The storage class to use to create the PVC to test.
 pvcStorageClassName: default
 # pvcSize -- The size of the PVC to be test.

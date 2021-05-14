@@ -1,24 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Values.namespace }}
+  name: {{ include "fio-benchmark.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "fio-benchmark.labels" . | nindent 4 }}
 spec:
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
   replicas: 1
   selector:
     matchLabels:
-      app: fio
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: fio
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: fio
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: fio
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
       - name: fio
@@ -51,17 +48,17 @@ spec:
                 operator: In
                 values:
                 - fio
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- range $key, $val := .Values.nodeSelector }}
-        {{ $key }}: {{ $val | quote }}
-        {{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: {{ .Release.Name }}
+          claimName: {{ include "fio-benchmark.fullname" . }}
       - name: job
         configMap:
-          name: {{ .Release.Name }}
+          name: {{ include "fio-benchmark.fullname" . }}
           items:
           - key: job
             path: job.fio

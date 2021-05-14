@@ -1,20 +1,22 @@
 apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Cluster
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Values.namespace }}
+  name: {{ include "cnp-loadbalancer.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cnp-loadbalancer.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.instances}}
   postgresql:
+    {{- with .Values.postgreSQLParameters }}
     parameters:
-      {{- range $key, $val := .Values.postgreSQLParameters }}
-      {{ $key }}: {{ $val | quote }}
-      {{- end }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   affinity:
+    {{- with .Values.nodeSelector }}
     nodeSelector:
-      {{- range $key, $val := .Values.nodeSelector }}
-      {{ $key }}: {{ $val | quote }}
-      {{- end }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   storage:
     storageClass: {{ .Values.storageClass }}
     size: {{ .Values.size }}

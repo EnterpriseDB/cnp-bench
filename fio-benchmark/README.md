@@ -4,6 +4,12 @@
 
 A Helm chart to run customized fio benchmarks
 
+**Homepage:** <https://github.com/EnterpriseDB/cnp-bench/>
+
+## Source Code
+
+* <https://github.com/EnterpriseDB/cnp-bench/>
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -18,7 +24,6 @@ A Helm chart to run customized fio benchmarks
 | jobRuntime | int | `60` | See fio runtime parameter. |
 | jobSize | string | `"1G"` | See fio size parameter. |
 | jobTimeBased | int | `1` | See fio time_based parameter. |
-| namespace | string | `"default"` | The namespace in which the resources will be created. |
 | nodeSelector | object | `{}` | A key/value dictionary used to schedule the benchmark on  defined nodes.  |
 | pvcSize | string | `"2Gi"` | The size of the PVC to be test. |
 | pvcStorageClassName | string | `"default"` | The storage class to use to create the PVC to test. |

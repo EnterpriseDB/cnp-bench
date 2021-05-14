@@ -35,6 +35,13 @@ Benchmarking is focused on two aspects:
 
 ## Installing the Helm charts
 
+Clone the repository:
+
+```
+git clone git@github.com:EnterpriseDB/cnp-bench.git
+cd cnp-bench
+```
+
 You can install a chart by defining a "Release Name" that will be used to
 identify the resources and running:
 
@@ -140,7 +147,7 @@ kubectl get secrets -n NAMESPACE RESOURCE_NAME-app -o jsonpath='{.data.pgpass}' 
 You can find The IP of the LoadBalancer exposing PostgreSQL with:
 
 ``` sh
-kubectl get services -n NAMESPACE RESOURCE_NAME-lb -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+kubectl get services -n NAMESPACE RESOURCE_NAME -o jsonpath='{.status.loadBalancer.ingress[].ip}'
 ```
 
 ## Copyright

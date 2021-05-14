@@ -1,8 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-lb
-  namespace: {{ .Values.namespace }}
+  name: {{ include "cnp-loadbalancer.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cnp-loadbalancer.labels" . | nindent 4 }}
 spec:
   ports:
   - name: postgres
@@ -10,7 +12,7 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    postgresql: {{ .Release.Name }}
+    postgresql: {{ include "cnp-loadbalancer.fullname" . }}
     role: primary
   sessionAffinity: None
   type: LoadBalancer

@@ -1,0 +1,15 @@
+{{- if .Values.nodeSelector }}
+Make sure at least a node has the following labels to be able to schedule the
+{{ include "fio-benchmark.fullname" . }} CNP cluster:
+{{- toYaml .Values.nodeSelector | nindent 2}}
+{{- end }}
+
+When the {{ include "fio-benchmark.fullname" . }} deployment is ready run
+
+  kubectl port-forward -n {{ .Release.Namespace }} deployment/{{ include "fio-benchmark.fullname" . }} 8000
+
+and then use a browser and connect to http://localhost:8000/ to get the benchmark data.
+
+You can then uninstall the chart
+
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}

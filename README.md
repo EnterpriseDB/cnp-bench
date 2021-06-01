@@ -94,6 +94,12 @@ The default 8k block size has been chosen to emulate a PostgreSQL workload.
 Disk that cap the amount of available IOPS can show very different throughput
 values changing this parameter.
 
+Below is an example of diagram of sequential writes on a local disk
+mounted on a `Standard_E8ds_v4` dedicated Kubernetes node on Azure
+(1 hour benchmark):
+
+![Sequential writes bandwidth](write_bw.1-2Draw.png)
+
 ## pgbench
 
 [pgbench](https://www.postgresql.org/docs/current/pgbench.html) is the default
@@ -125,6 +131,24 @@ and the node for CNP instances to be labelled with `workload: postgresql`.
 ``` sh
 kubectl label node/NODE_NAME workload:pgbench
 kubectl label node/OTHER_NODE_NAME workload:postgresql
+```
+
+Below is an example of `pgbench` output on the same `Standard_E8ds_v4`
+dedicated Kubernetes node on Azure with local disks as in the previous section
+(1 hour benchmark):
+
+```console
+starting vacuum...end.
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 12000
+query mode: simple
+number of clients: 16
+number of threads: 8
+duration: 3600 s
+number of transactions actually processed: 23022969
+latency average = 2.502 ms
+tps = 6395.218137 (including connections establishing)
+tps = 6395.231977 (excluding connections establishing)
 ```
 
 ## CNP with LoadBalancer

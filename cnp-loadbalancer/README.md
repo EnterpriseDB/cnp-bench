@@ -1,6 +1,6 @@
 # cnp-loadbalancer
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Create a CNP cluster and expose it using a LoadBalancer. Used to test CNP from an external application.
 
@@ -14,6 +14,10 @@ Create a CNP cluster and expose it using a LoadBalancer. Used to test CNP from a
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| cnpPoolerConfiguration | object | `{"parameters":{},"poolMode":"session"}` | Configuration of the pooler, applied if cnpPoolerInstances > 0 |
+| cnpPoolerConfiguration.parameters | object | `{}` | Dictionary of key-value pairs representing pgBouncer configuration. |
+| cnpPoolerConfiguration.poolMode | string | `"session"` | accepted values: session, transaction |
+| cnpPoolerInstances | int | `0` | The number of pooler replicas that receive the connections. If If >0 the benchmarks are run with connection pooling |
 | image | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
 | instances | int | `1` |  |
 | nodeSelector.workload | string | `"postgresql"` |  |

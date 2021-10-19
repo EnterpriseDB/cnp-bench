@@ -1,6 +1,6 @@
 # pgbench-benchmark
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 
@@ -17,6 +17,10 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 | cnpImage | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
 | cnpInstances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
 | cnpNodeSelector | object | `{"workload":"postgresql"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
+| cnpPoolerConfiguration | object | `{"parameters":{},"poolMode":"session"}` | Configuration of the pooler, applied if cnpPoolerInstances > 0 |
+| cnpPoolerConfiguration.parameters | object | `{}` | Dictionary of key-value pairs representing pgBouncer configuration. |
+| cnpPoolerConfiguration.poolMode | string | `"session"` | accepted values: session, transaction |
+| cnpPoolerInstances | int | `0` | The number of pooler replicas that receive the connections. If If >0 the benchmarks are run with connection pooling |
 | cnpPostgreSQLParameters | object | `{"log_autovacuum_min_duration":"1s","log_checkpoints":"on","log_line_prefix":"%m [%p]: u=[%u] db=[%d] app=[%a] c=[%h] s=[%c:%l] tx=[%v:%x] ","log_lock_waits":"on","log_min_duration_statement":"1000","log_statement":"ddl","log_temp_files":"1024","maintenance_work_mem":"128MB","shared_buffers":"512MB"}` | Dictionary of key-value pairs representing PostgreSQL configuration. |
 | cnpSize | string | `"1Gi"` | The size of the PVCs used by CNP instances. |
 | cnpStorageClass | string | `"default"` | The storage class used to create PVCs for CNP instances. |

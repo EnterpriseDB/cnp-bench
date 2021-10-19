@@ -1,0 +1,19 @@
+{{ if .Values.cnpPoolerInstances}}
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: Pooler
+metadata:
+  name: pooler-{{ include "cnp-loadbalancer.fullname" . }}
+  labels:
+  {{- include "cnp-loadbalancer.labels" . | nindent 4 }}
+spec:
+  cluster:
+    name: {{ include "cnp-loadbalancer.fullname" . }}
+  instances: {{ .Values.cnpPoolerInstances }}
+  type: rw
+  pgbouncer:
+    poolMode: {{ .Values.cnpPoolerConfiguration.poolMode}}
+    {{- with .Values.cnpPoolerConfiguration.parameters }}
+    parameters:
+      {{- toYaml .  | nindent 6 }}
+    {{ end }}
+{{ end }}

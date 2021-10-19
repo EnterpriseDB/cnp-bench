@@ -1,0 +1,15 @@
+{{ if .Values.cnpPoolerInstances}}
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: Pooler
+metadata:
+  name: pooler-{{ include "pgbench-benchmark.fullname" . }}
+  labels:
+  {{- include "pgbench-benchmark.labels" . | nindent 4 }}
+spec:
+  cluster:
+    name: {{ include "pgbench-benchmark.fullname" . }}
+  instances: {{ .Values.cnpPoolerInstances }}
+  type: rw
+  pgbouncer:
+  {{- .Values.cnpPoolerConfiguration | toYaml  | nindent 4 }}
+{{ end }}

@@ -15,5 +15,5 @@ spec:
     {{- with .Values.pooler.pgbouncer.parameters }}
     parameters:
       {{- toYaml .  | nindent 6 }}
-  {{ end }}
+    {{ end }}
 {{ end }}

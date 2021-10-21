@@ -32,5 +32,7 @@ spec:
       {{- toYaml . | nindent 6 }}
     {{- end }}
   storage:
-    storageClass: {{ .Values.storageClass }}
+    {{- with .Values.storageClass }}
+    storageClass: {{ . }}
+    {{- end }}
     size: {{ .Values.size }}

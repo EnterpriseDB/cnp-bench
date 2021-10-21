@@ -1,16 +1,16 @@
-{{- if .Values.cnpNodeSelector }}
+{{ if .Values.cnpNodeSelector -}}
 Make sure at least a node has the following labels to be able to schedule the
 {{ include "pgbench-benchmark.fullname" . }} CNP cluster:
 {{- toYaml .Values.cnpNodeSelector | nindent 2}}
 {{- end }}
 
-{{- if .Values.pgbenchNodeSelector }}
+{{ if .Values.pgbenchNodeSelector -}}
 Make sure at least a node has the following labels to be able to schedule the
 {{ include "pgbench-benchmark.fullname" . }} job running pgbench:
 {{- toYaml .Values.pgbenchNodeSelector | nindent 2}}
 {{- end }}
 
-{{ if .Values.cnpPoolerInstances }}
+{{ if .Values.cnpPoolerInstances -}}
 The benchmark is being run with the connection pooling.
 {{ end }}
 

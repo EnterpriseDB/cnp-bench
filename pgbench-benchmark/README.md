@@ -19,7 +19,7 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 | cnpNodeSelector | object | `{"workload":"postgresql"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
 | cnpPostgreSQLParameters | object | `{"log_autovacuum_min_duration":"1s","log_checkpoints":"on","log_line_prefix":"%m [%p]: u=[%u] db=[%d] app=[%a] c=[%h] s=[%c:%l] tx=[%v:%x] ","log_lock_waits":"on","log_min_duration_statement":"1000","log_statement":"ddl","log_temp_files":"1024","maintenance_work_mem":"128MB","shared_buffers":"512MB"}` | Dictionary of key-value pairs representing PostgreSQL configuration. |
 | cnpSize | string | `"1Gi"` | The size of the PVCs used by CNP instances. |
-| cnpStorageClass | string | `"default"` | The storage class used to create PVCs for CNP instances. |
+| cnpStorageClass | string | `""` | The storage class used to create PVCs for CNP instances. |
 | pgbenchClients | int | `1` | The number of clients used by pgbench. |
 | pgbenchJobs | int | `1` | The number of jobs used by pgbench. |
 | pgbenchNodeSelector | object | `{"workload":"pgbench"}` | Dictionary of key-value pairs used to define the nodes where the pgbench pod can run; used to avoid pgbench and PostgreSQL running on the same node. |

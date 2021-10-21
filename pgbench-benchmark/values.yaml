@@ -55,12 +55,14 @@ pgbenchJobs: 1
 # that will be used for the main pgbench run; can be useful with storage classes
 # that allow I/O bursts where could affect the actual benchmark result.
 pgbenchWarmTime: 0
-# cnpPoolerInstances -- The number of pooler replicas that receive the connections.
-# If If >0 the benchmarks are run with connection pooling
-cnpPoolerInstances: 0
-# cnpPoolerConfiguration -- Configuration of the pooler, applied if cnpPoolerInstances > 0
-cnpPoolerConfiguration:
-  # -- accepted values: session, transaction
-  poolMode: session
-  # -- Dictionary of key-value pairs representing pgBouncer configuration.
-  parameters: {}
+
+# Configuration of the pooler
+pooler:
+  # -- The number of pooler replicas that receive the connections.
+  # If >0 the benchmarks are run with connection pooling
+  instances: 1
+  pgbouncer:
+    # -- The pool mode, accepted values: session, transaction
+    poolMode: session
+    # -- PgBouncer configuration.
+    parameters: {}

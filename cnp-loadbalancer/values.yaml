@@ -12,20 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# istances -- The amount of PostgreSQL instances in the CNP Cluster.
+# -- The amount of PostgreSQL instances in the CNP Cluster.
 instances: 1
-# storageClass -- The storage class used to create PVCs for CNP instances.
+# -- The storage class used to create PVCs for CNP instances.
 storageClass: default
-# size -- The size of the PVCs used by CNP instances.
+# -- The size of the PVCs used by CNP instances.
 size: 1Gi
-# image -- The PostgreSQL image used by CNP and PgBench.
+# -- The PostgreSQL image used by CNP and PgBench.
 image: quay.io/enterprisedb/postgresql:13.2
 # ndeSelector -- Dictionary of key-value pairs used to define the nodes
 # where the cluster instances can run; used to avoid pgbench and PostgreSQL
 # running on the same node.
 nodeSelector:
   workload: postgresql
-# postgreSQLParameters -- Dictionary of key-value pairs representing
+# -- Dictionary of key-value pairs representing
 # PostgreSQL configuration.
 postgreSQLParameters:
   shared_buffers: '512MB'
@@ -37,12 +37,14 @@ postgreSQLParameters:
   log_statement: 'ddl'
   log_temp_files: '1024'
   log_autovacuum_min_duration: '1s'
-# cnpPoolerInstances -- The number of pooler replicas that receive the connections.
-# If If >0 the benchmarks are run with connection pooling
-cnpPoolerInstances: 0
-# cnpPoolerConfiguration -- Configuration of the pooler, applied if cnpPoolerInstances > 0
-cnpPoolerConfiguration:
-  # -- accepted values: session, transaction
-  poolMode: session
-  # -- Dictionary of key-value pairs representing pgBouncer configuration.
-  parameters: {}
+
+# Configuration of the pooler
+pooler:
+  # -- The number of pooler replicas that receive the connections.
+  # If >0 the benchmarks are run with connection pooling
+  instances: 0
+  pgbouncer:
+    # -- The pool mode, accepted values: session, transaction
+    poolMode: session
+    # -- PgBouncer configuration.
+    parameters: {}

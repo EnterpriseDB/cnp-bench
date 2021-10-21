@@ -14,13 +14,12 @@ Create a CNP cluster and expose it using a LoadBalancer. Used to test CNP from a
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| cnpPoolerConfiguration | object | `{"parameters":{},"poolMode":"session"}` | Configuration of the pooler, applied if cnpPoolerInstances > 0 |
-| cnpPoolerConfiguration.parameters | object | `{}` | Dictionary of key-value pairs representing pgBouncer configuration. |
-| cnpPoolerConfiguration.poolMode | string | `"session"` | accepted values: session, transaction |
-| cnpPoolerInstances | int | `0` | The number of pooler replicas that receive the connections. If If >0 the benchmarks are run with connection pooling |
 | image | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
 | instances | int | `1` |  |
 | nodeSelector.workload | string | `"postgresql"` |  |
+| pooler.instances | int | `0` | The number of pooler replicas that receive the connections. If >0 the benchmarks are run with connection pooling |
+| pooler.pgbouncer.parameters | object | `{}` | PgBouncer configuration. |
+| pooler.pgbouncer.poolMode | string | `"session"` | The pool mode, accepted values: session, transaction |
 | postgreSQLParameters | object | `{"log_autovacuum_min_duration":"1s","log_checkpoints":"on","log_line_prefix":"%m [%p]: u=[%u] db=[%d] app=[%a] c=[%h] s=[%c:%l] tx=[%v:%x] ","log_lock_waits":"on","log_min_duration_statement":"1000","log_statement":"ddl","log_temp_files":"1024","maintenance_work_mem":"128MB","shared_buffers":"512MB"}` | Dictionary of key-value pairs representing PostgreSQL configuration. |
 | size | string | `"1Gi"` | The size of the PVCs used by CNP instances. |
 | storageClass | string | `"default"` | The storage class used to create PVCs for CNP instances. |

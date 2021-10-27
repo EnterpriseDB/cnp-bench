@@ -15,7 +15,7 @@
 # cnpInstances -- The amount of PostgreSQL instances in the CNP Cluster.
 cnpInstances: 1
 # cnpStorageClass -- The storage class used to create PVCs for CNP instances.
-cnpStorageClass: default
+cnpStorageClass: ""
 # cnpSize -- The size of the PVCs used by CNP instances.
 cnpSize: 1Gi
 # cnpImage -- The PostgreSQL image used by CNP and PgBench.
@@ -55,3 +55,16 @@ pgbenchJobs: 1
 # that will be used for the main pgbench run; can be useful with storage classes
 # that allow I/O bursts where could affect the actual benchmark result.
 pgbenchWarmTime: 0
+
+# Configuration of the pooler
+pooler:
+  # -- The number of pooler replicas that receive the connections.
+  # If >0 the benchmarks are run with connection pooling
+  instances: 0
+  nodeSelector:
+    workload: pooler
+  pgbouncer:
+    # -- The pool mode, accepted values: session, transaction
+    poolMode: session
+    # -- PgBouncer configuration.
+    parameters: {}

@@ -26,7 +26,6 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    postgresql: {{ include "cnp-loadbalancer.fullname" . }}
-    role: primary
+  {{- include "cnp-loadbalancer.serviceSelectors" . | nindent 4 }}
   sessionAffinity: None
   type: LoadBalancer

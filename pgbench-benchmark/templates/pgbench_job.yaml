@@ -27,7 +27,7 @@ spec:
         image: {{ .Values.cnpImage }}
         env:
         - name: PGHOST
-          value: {{ include "pgbench-benchmark.fullname" . }}-rw
+          value: {{ include "pgbench-benchmark.service" . }}
         - name: PGUSER
           valueFrom:
             secretKeyRef:
@@ -41,12 +41,12 @@ spec:
         command:
         - sh
         - -c
-        - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "pgbench-benchmark.fullname" . }}-rw' sleep 5; done
+        - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "pgbench-benchmark.service" . }}' sleep 15; done
       - name: pgbench-init
         image: {{ .Values.cnpImage }}
         env:
         - name: PGHOST
-          value: {{ include "pgbench-benchmark.fullname" . }}-rw
+          value: {{ include "pgbench-benchmark.service" . }}
         - name: PGUSER
           valueFrom:
             secretKeyRef:
@@ -68,7 +68,7 @@ spec:
         image: {{ .Values.cnpImage }}
         env:
         - name: PGHOST
-          value: {{ include "pgbench-benchmark.fullname" . }}-rw
+          value: {{ include "pgbench-benchmark.service" . }}
         - name: PGUSER
           valueFrom:
             secretKeyRef:
@@ -94,7 +94,7 @@ spec:
         image: {{ .Values.cnpImage }}
         env:
         - name: PGHOST
-          value: {{ include "pgbench-benchmark.fullname" . }}-rw
+          value: {{ include "pgbench-benchmark.service" . }}
         - name: PGUSER
           valueFrom:
             secretKeyRef:

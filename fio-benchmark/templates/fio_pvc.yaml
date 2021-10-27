@@ -20,7 +20,9 @@ metadata:
   labels:
     {{- include "fio-benchmark.labels" . | nindent 4 }}
 spec:
-  storageClassName: {{ .Values.pvcStorageClassName }}
+  {{- with .Values.pvcStorageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

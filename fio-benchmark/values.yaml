@@ -13,7 +13,7 @@
 # limitations under the License.
 #
 # pvcStorageClassName -- The storage class to use to create the PVC to test.
-pvcStorageClassName: default
+pvcStorageClassName: ""
 # pvcSize -- The size of the PVC to be test.
 pvcSize: 2Gi
 # nodeSelector -- A key/value dictionary used to schedule the benchmark on

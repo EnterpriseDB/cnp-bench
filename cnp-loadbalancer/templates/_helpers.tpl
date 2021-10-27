@@ -40,3 +40,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Service that we should connect to
+*/}}
+{{- define "cnp-loadbalancer.serviceSelectors" -}}
+{{- if .Values.cnpPoolerInstances -}}
+k8s.enterprisedb.io/poolerName: pooler-{{ include "cnp-loadbalancer.fullname" . }}
+{{- else -}}
+postgresql: {{ include "cnp-loadbalancer.fullname" . }}
+role: primary
+{{- end -}}
+{{- end}}

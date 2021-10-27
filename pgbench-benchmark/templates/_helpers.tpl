@@ -40,3 +40,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Service that we should connect to
+*/}}
+{{- define "pgbench-benchmark.service" -}}
+{{- if .Values.cnpPoolerInstances -}}
+pooler-{{ include "pgbench-benchmark.fullname" . }}
+{{- else -}}
+{{ include "pgbench-benchmark.fullname" . }}-rw
+{{- end -}}
+{{- end}}

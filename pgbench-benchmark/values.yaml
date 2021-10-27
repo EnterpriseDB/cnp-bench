@@ -61,6 +61,8 @@ pooler:
   # -- The number of pooler replicas that receive the connections.
   # If >0 the benchmarks are run with connection pooling
   instances: 0
+  nodeSelector:
+    workload: pooler
   pgbouncer:
     # -- The pool mode, accepted values: session, transaction
     poolMode: session

@@ -10,8 +10,11 @@ Make sure at least a node has the following labels to be able to schedule the
 {{- toYaml .Values.pgbenchNodeSelector | nindent 2}}
 {{- end }}
 
-{{ if .Values.cnpPoolerInstances -}}
-The benchmark is being run with the connection pooling.
+{{ if .Values.pooler.instances -}}
+The benchmark is being run with connection pooling.
+Make sure at least a node has the following labels to be able to schedule the
+pooler-{{ include "pgbench-benchmark.fullname" . }} pooler:
+{{- toYaml .Values.pooler.nodeSelector | nindent 2}}
 {{ end }}
 
 After the {{ include "pgbench-benchmark.fullname" . }} job completes run

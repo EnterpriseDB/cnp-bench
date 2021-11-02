@@ -21,6 +21,23 @@ metadata:
     {{- include "cnp-loadbalancer.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.instances}}
+  {{ if  or .Values.cnpMonitoring.customQueriesConfigMap .Values.cnpMonitoring.customQueriesSecret }}
+
+  monitoring:
+    customQueriesConfigMap:
+      {{- range  .Values.cnpMonitoring.customQueriesConfigMap  }}
+      - key: {{ .key }}
+        name: {{ .name }}
+    {{- end }}
+
+    customQueriesSecret:
+      {{- range  .Values.cnpMonitoring.customQueriesSecret  }}
+      - key: {{ .key }}
+        name: {{ .name }}
+  {{- end }}
+
+  {{ end }}
+
   postgresql:
     {{- with .Values.postgreSQLParameters }}
     parameters:

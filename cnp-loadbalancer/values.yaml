@@ -25,6 +25,12 @@ image: quay.io/enterprisedb/postgresql:13.2
 # running on the same node.
 nodeSelector:
   workload: postgresql
+# cnpMonitoring -- Configures custom queries for monitoring.
+# The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries).
+# Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/
+cnpMonitoring:
+  customQueriesConfigMap: [ ]
+  customQueriesSecret: [ ]
 # -- Dictionary of key-value pairs representing
 # PostgreSQL configuration.
 postgreSQLParameters:

@@ -18,7 +18,7 @@ metadata:
   name: {{ include "pgbench-benchmark.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-  {{- include "pgbench-benchmark.labels" . | nindent 4 }}
+    {{- include "pgbench-benchmark.labels" . | nindent 4 }}
 spec:
   instances: {{ .Values.cnpInstances}}
 
@@ -40,15 +40,15 @@ spec:
   {{ end }}
 
   postgresql:
-  {{- with .Values.cnpPostgreSQLParameters }}
+    {{- with .Values.cnpPostgreSQLParameters }}
     parameters:
-    {{- toYaml . | nindent 6 }}
-  {{- end }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   affinity:
-  {{- with .Values.cnpNodeSelector }}
+    {{- with .Values.cnpNodeSelector }}
     nodeSelector:
-    {{- toYaml . | nindent 6 }}
-  {{- end }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   storage:
     {{- with .Values.cnpStorageClass }}
     storageClass: {{ . }}

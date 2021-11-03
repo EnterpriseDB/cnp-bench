@@ -29,8 +29,8 @@ nodeSelector:
 # The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries).
 # Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/
 cnpMonitoring:
-  customQueriesConfigMap: [ ]
-  customQueriesSecret: [ ]
+  customQueriesConfigMap: []
+  customQueriesSecret: []
 # -- Dictionary of key-value pairs representing
 # PostgreSQL configuration.
 postgreSQLParameters:

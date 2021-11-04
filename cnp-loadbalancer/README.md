@@ -14,6 +14,7 @@ Create a CNP cluster and expose it using a LoadBalancer. Used to test CNP from a
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| cnpMonitoring | object | `{"customQueriesConfigMap":[],"customQueriesSecret":[]}` | Configures custom queries for monitoring. The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries). Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/ |
 | image | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
 | instances | int | `1` |  |
 | nodeSelector.workload | string | `"postgresql"` |  |

@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "jobBs": {
+            "type": "string"
+        },
+        "jobDirect": {
+            "type": "integer"
+        },
+        "jobEndFsync": {
+            "type": "integer"
+        },
+        "jobIodepth": {
+            "type": "integer"
+        },
+        "jobIoengine": {
+            "type": "string"
+        },
+        "jobLogAvgMsec": {
+            "type": "integer"
+        },
+        "jobRW": {
+            "type": "string"
+        },
+        "jobRuntime": {
+            "type": "integer"
+        },
+        "jobSize": {
+            "type": "string"
+        },
+        "jobTimeBased": {
+            "type": "integer"
+        },
+        "nodeSelector": {
+            "type": "object"
+        },
+        "pvcSize": {
+            "type": "string"
+        },
+        "pvcStorageClassName": {
+            "type": "string"
+        }
+    }
+}

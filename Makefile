@@ -7,7 +7,8 @@ help: ## Prints help command output
 
 .PHONY: generate-schemas
 generate-schema: ## Updates the auto-generated charts values.schema.json
-	@helm schema-gen pgbench-benchmark/values.yaml > pgbench-benchmark/values.schema.json
+	@helm schema-gen pgbench-benchmark/values.yaml > pgbench-benchmark/values.schema.json || \
+		(@echo "Please, run: helm plugin install https://github.com/karuppiah7890/helm-schema-gen.git" && exit 1)
 	@helm schema-gen fio-benchmark/values.yaml > fio-benchmark/values.schema.json
 	@helm schema-gen cnp-loadbalancer/values.yaml > cnp-loadbalancer/values.schema.json
 	@echo "Validation schemas generated"

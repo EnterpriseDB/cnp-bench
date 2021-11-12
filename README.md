@@ -36,6 +36,8 @@ Benchmarking is focused on two aspects:
   ``` sh
   kubectl apply -f https://get.enterprisedb.io/cnp/postgresql-operator-VERSION.yaml
   ```
+  * Take a look at [cnp-sandbox](https://github.com/EnterpriseDB/cnp-sandbox) for an all-in-one Helm chart
+    that installs Cloud Native PostgreSQL with the monitoring stack needed by the provided Grafana Dashboard.
 
 * Helm should be installed locally, see the
   ["Installing Helm" documentation page](https://helm.sh/docs/intro/install/).

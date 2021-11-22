@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+{{ if not .Values.cnpExisting }}
 apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Cluster
 metadata:
@@ -54,3 +55,4 @@ spec:
     storageClass: {{ . }}
     {{- end }}
     size: {{ .Values.cnpSize }}
+{{- end }}

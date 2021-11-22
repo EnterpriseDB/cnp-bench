@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# -- Whether the benchmark should be run against an existing cluster
+# or a new one has to be created
+cnpExisting: false
+# -- The name of a Secret of type basic-auth containing the existing cluster credentials
+cnpExistingCredentials: ""
+# -- The address of the existing cluster
+cnpExistingHost: ""
 # cnpInstances -- The amount of PostgreSQL instances in the CNP Cluster.
 cnpInstances: 1
 # cnpStorageClass -- The storage class used to create PVCs for CNP instances.

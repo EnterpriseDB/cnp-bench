@@ -26,18 +26,7 @@ spec:
       - name: wait-for-cnp
         image: {{ .Values.cnpImage }}
         env:
-        - name: PGHOST
-          value: {{ include "pgbench-benchmark.service" . }}
-        - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: username
-        - name: PGPASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: password
+          {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
         - sh
         - -c
@@ -45,18 +34,7 @@ spec:
       - name: pgbench-init
         image: {{ .Values.cnpImage }}
         env:
-        - name: PGHOST
-          value: {{ include "pgbench-benchmark.service" . }}
-        - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: username
-        - name: PGPASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: password
+          {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
         - pgbench
         args:
@@ -67,18 +45,7 @@ spec:
       - name: pgbench-warm
         image: {{ .Values.cnpImage }}
         env:
-        - name: PGHOST
-          value: {{ include "pgbench-benchmark.service" . }}
-        - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: username
-        - name: PGPASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: password
+          {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
         - pgbench
         args:
@@ -93,18 +60,7 @@ spec:
       - name: pgbench
         image: {{ .Values.cnpImage }}
         env:
-        - name: PGHOST
-          value: {{ include "pgbench-benchmark.service" . }}
-        - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: username
-        - name: PGPASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "pgbench-benchmark.fullname" . }}-app
-              key: password
+          {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
         - pgbench
         args:

@@ -51,3 +51,33 @@ pooler-{{ include "pgbench-benchmark.fullname" . }}
 {{ include "pgbench-benchmark.fullname" . }}-rw
 {{- end -}}
 {{- end}}
+
+{{- define "pgbench-benchmark.credentials" -}}
+{{- if not .Values.cnpExisting }}
+- name: PGHOST
+  value: {{ include "pgbench-benchmark.service" . }}
+- name: PGUSER
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "pgbench-benchmark.fullname" . }}-app
+      key: username
+- name: PGPASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "pgbench-benchmark.fullname" . }}-app
+      key: password
+{{- else -}}
+- name: PGHOST
+  value: {{ .Values.cnpExistingHost }}
+- name: PGUSER
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.cnpExistingCredentials }}
+      key: username
+- name: PGPASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.cnpExistingCredentials }}
+      key: password
+{{- end -}}
+{{- end }}

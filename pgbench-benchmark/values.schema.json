@@ -2,6 +2,15 @@
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
+        "cnpExisting": {
+            "type": "boolean"
+        },
+        "cnpExistingCredentials": {
+            "type": "string"
+        },
+        "cnpExistingHost": {
+            "type": "string"
+        },
         "cnpImage": {
             "type": "string"
         },

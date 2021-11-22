@@ -1,4 +1,4 @@
-{{ if .Values.pooler.instances }}
+{{ if and .Values.pooler.instances (not .Values.cnpExisting) }}
 apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Pooler
 metadata:

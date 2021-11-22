@@ -14,6 +14,9 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| cnpExisting | bool | `false` |  |
+| cnpExistingCredentials | string | `""` | The name of a Secret of type basic-auth containing the existing cluster credentials |
+| cnpExistingHost | string | `""` | The address of the existing cluster |
 | cnpImage | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
 | cnpInstances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
 | cnpMonitoring | object | `{"customQueriesConfigMap":[],"customQueriesSecret":[]}` | Configures custom queries for monitoring. The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries). Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/ |

@@ -18,9 +18,9 @@ cnp:
   # or a new one has to be created
   existingCluster: false
   # -- The name of a Secret of type basic-auth containing the existing cluster credentials
-  cnpExistingCredentials: ""
+  existingCredentials: ""
   # -- The address of the existing cluster
-  cnpExistingHost: ""
+  existingHost: ""
   # -- The amount of PostgreSQL instances in the CNP Cluster.
   instances: 1
   # -- The PostgreSQL image used by CNP and PgBench.

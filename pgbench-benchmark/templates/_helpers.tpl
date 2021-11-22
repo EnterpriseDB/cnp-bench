@@ -53,7 +53,7 @@ pooler-{{ include "pgbench-benchmark.fullname" . }}
 {{- end}}
 
 {{- define "pgbench-benchmark.credentials" -}}
-{{- if not .Values.cnpExisting }}
+{{- if not .Values.cnp.existingCluster }}
 - name: PGHOST
   value: {{ include "pgbench-benchmark.service" . }}
 - name: PGUSER

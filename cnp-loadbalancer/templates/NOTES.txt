@@ -1,7 +1,7 @@
-{{ if .Values.nodeSelector -}}
+{{ if .Values.cnp.nodeSelector -}}
 Make sure at least a node has the following labels to be able to schedule the
 {{ include "cnp-loadbalancer.fullname" . }} CNP cluster:
-{{- toYaml .Values.nodeSelector | nindent 2}}
+{{- toYaml .Values.cnp.nodeSelector | nindent 2}}
 {{- end }}
 
 You can find the password for the `app` user running

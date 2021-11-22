@@ -5,14 +5,20 @@
         "cnp": {
             "type": "object",
             "properties": {
-                "cnpExistingCredentials": {
-                    "type": "string"
-                },
-                "cnpExistingHost": {
-                    "type": "string"
-                },
                 "existingCluster": {
                     "type": "boolean"
+                },
+                "existingCredentials": {
+                    "type": "string"
+                },
+                "existingDatabase": {
+                    "type": "string"
+                },
+                "existingHost": {
+                    "type": "string"
+                },
+                "existingPort": {
+                    "type": "string"
                 },
                 "image": {
                     "type": "string"

@@ -19,8 +19,12 @@ cnp:
   existingCluster: false
   # -- The name of a Secret of type basic-auth containing the existing cluster credentials
   existingCredentials: ""
-  # -- The address of the existing cluster
+  # -- The address of the existing cluster (default: empty)
   existingHost: ""
+  # -- The name of the existing database (default: empty)
+  existingPort: ""
+  # -- The port where PostgreSQL is listening on the specified host (default: 5432)
+  existingDatabase: ""
   # -- The amount of PostgreSQL instances in the CNP Cluster.
   instances: 1
   # -- The PostgreSQL image used by CNP and PgBench.

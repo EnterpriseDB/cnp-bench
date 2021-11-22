@@ -69,6 +69,10 @@ pooler-{{ include "pgbench-benchmark.fullname" . }}
 {{- else -}}
 - name: PGHOST
   value: {{ .Values.cnp.existingHost }}
+- name: PGDATABASE
+  value: {{ .Values.cnp.existingDatabase }}
+- name: PGPORT
+  value: {{ .Values.cnp.existingPort }}
 - name: PGUSER
   valueFrom:
     secretKeyRef:

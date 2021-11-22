@@ -2,105 +2,119 @@
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
-        "cnpExisting": {
-            "type": "boolean"
-        },
-        "cnpExistingCredentials": {
-            "type": "string"
-        },
-        "cnpExistingHost": {
-            "type": "string"
-        },
-        "cnpImage": {
-            "type": "string"
-        },
-        "cnpInstances": {
-            "type": "integer"
-        },
-        "cnpMonitoring": {
+        "cnp": {
             "type": "object",
             "properties": {
-                "customQueriesConfigMap": {
-                    "type": "array"
-                },
-                "customQueriesSecret": {
-                    "type": "array"
-                }
-            }
-        },
-        "cnpNodeSelector": {
-            "type": "object",
-            "properties": {
-                "workload": {
-                    "type": "string"
-                }
-            }
-        },
-        "cnpPostgreSQLParameters": {
-            "type": "object",
-            "properties": {
-                "log_autovacuum_min_duration": {
+                "cnpExistingCredentials": {
                     "type": "string"
                 },
-                "log_checkpoints": {
+                "cnpExistingHost": {
                     "type": "string"
                 },
-                "log_line_prefix": {
+                "existingCluster": {
+                    "type": "boolean"
+                },
+                "image": {
                     "type": "string"
                 },
-                "log_lock_waits": {
-                    "type": "string"
-                },
-                "log_min_duration_statement": {
-                    "type": "string"
-                },
-                "log_statement": {
-                    "type": "string"
-                },
-                "log_temp_files": {
-                    "type": "string"
-                },
-                "maintenance_work_mem": {
-                    "type": "string"
-                },
-                "shared_buffers": {
-                    "type": "string"
-                }
-            }
-        },
-        "cnpSize": {
-            "type": "string"
-        },
-        "cnpStorageClass": {
-            "type": "string"
-        },
-        "pgbenchClients": {
-            "type": "integer"
-        },
-        "pgbenchJobs": {
-            "type": "integer"
-        },
-        "pgbenchNodeSelector": {
-            "type": "object",
-            "properties": {
-                "workload": {
-                    "type": "string"
-                }
-            }
-        },
-        "pgbenchScaleFactor": {
-            "type": "integer"
-        },
-        "pgbenchTime": {
-            "type": "integer"
-        },
-        "pgbenchWarmTime": {
-            "type": "integer"
-        },
-        "pooler": {
-            "type": "object",
-            "properties": {
                 "instances": {
+                    "type": "integer"
+                },
+                "monitoring": {
+                    "type": "object",
+                    "properties": {
+                        "customQueriesConfigMap": {
+                            "type": "array"
+                        },
+                        "customQueriesSecret": {
+                            "type": "array"
+                        }
+                    }
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "properties": {
+                        "workload": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "pooler": {
+                    "type": "object",
+                    "properties": {
+                        "instances": {
+                            "type": "integer"
+                        },
+                        "nodeSelector": {
+                            "type": "object",
+                            "properties": {
+                                "workload": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "pgbouncer": {
+                            "type": "object",
+                            "properties": {
+                                "parameters": {
+                                    "type": "object"
+                                },
+                                "poolMode": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "postgreSQLParameters": {
+                    "type": "object",
+                    "properties": {
+                        "log_autovacuum_min_duration": {
+                            "type": "string"
+                        },
+                        "log_checkpoints": {
+                            "type": "string"
+                        },
+                        "log_lock_waits": {
+                            "type": "string"
+                        },
+                        "log_min_duration_statement": {
+                            "type": "string"
+                        },
+                        "log_statement": {
+                            "type": "string"
+                        },
+                        "log_temp_files": {
+                            "type": "string"
+                        },
+                        "maintenance_work_mem": {
+                            "type": "string"
+                        },
+                        "shared_buffers": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "storage": {
+                    "type": "object",
+                    "properties": {
+                        "size": {
+                            "type": "string"
+                        },
+                        "storageClass": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "pgbench": {
+            "type": "object",
+            "properties": {
+                "clients": {
+                    "type": "integer"
+                },
+                "jobs": {
                     "type": "integer"
                 },
                 "nodeSelector": {
@@ -111,16 +125,14 @@
                         }
                     }
                 },
-                "pgbouncer": {
-                    "type": "object",
-                    "properties": {
-                        "parameters": {
-                            "type": "object"
-                        },
-                        "poolMode": {
-                            "type": "string"
-                        }
-                    }
+                "scaleFactor": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "integer"
+                },
+                "warmTime": {
+                    "type": "integer"
                 }
             }
         }

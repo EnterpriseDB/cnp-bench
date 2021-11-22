@@ -24,7 +24,7 @@ spec:
     spec:
       initContainers:
       - name: wait-for-cnp
-        image: {{ .Values.cnpImage }}
+        image: {{ .Values.cnp.image }}
         env:
           {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
@@ -32,7 +32,7 @@ spec:
         - -c
         - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "pgbench-benchmark.service" . }}' sleep 15; done
       - name: pgbench-init
-        image: {{ .Values.cnpImage }}
+        image: {{ .Values.cnp.image }}
         env:
           {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
@@ -40,38 +40,38 @@ spec:
         args:
         - -i
         - -s
-        - {{ .Values.pgbenchScaleFactor | quote }}
-      {{- if and ( .Values.pgbenchWarmTime ) ( ne ( .Values.pgbenchWarmTime | quote ) "0" )}}
+        - {{ .Values.pgbench.scaleFactor | quote }}
+      {{- if and ( .Values.pgbench.warmTime ) ( ne ( .Values.pgbench.warmTime | quote ) "0" )}}
       - name: pgbench-warm
-        image: {{ .Values.cnpImage }}
+        image: {{ .Values.cnp.image }}
         env:
           {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
         - pgbench
         args:
         - -T
-        - {{ .Values.pgbenchWarmTime | quote }}
+        - {{ .Values.pgbench.warmTime | quote }}
         - -c
-        - {{ .Values.pgbenchClients | quote }}
+        - {{ .Values.pgbench.clients | quote }}
         - -j
-        - {{ .Values.pgbenchJobs | quote }}
+        - {{ .Values.pgbench.jobs | quote }}
       {{- end }}
       containers:
       - name: pgbench
-        image: {{ .Values.cnpImage }}
+        image: {{ .Values.cnp.image }}
         env:
           {{- include "pgbench-benchmark.credentials" . | nindent 10 }}
         command:
         - pgbench
         args:
         - -T
-        - {{ .Values.pgbenchTime | quote }}
+        - {{ .Values.pgbench.time | quote }}
         - -c
-        - {{ .Values.pgbenchClients | quote }}
+        - {{ .Values.pgbench.clients | quote }}
         - -j
-        - {{ .Values.pgbenchJobs | quote }}
+        - {{ .Values.pgbench.jobs | quote }}
       restartPolicy: Never
-      {{- with .Values.pgbenchNodeSelector }}
+      {{- with .Values.pgbench.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}

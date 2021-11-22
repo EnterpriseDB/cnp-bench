@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-{{ if not .Values.cnpExisting }}
+{{ if not .Values.cnp.existingCluster }}
 apiVersion: postgresql.k8s.enterprisedb.io/v1
 kind: Cluster
 metadata:
@@ -21,19 +21,19 @@ metadata:
   labels:
     {{- include "pgbench-benchmark.labels" . | nindent 4 }}
 spec:
-  instances: {{ .Values.cnpInstances}}
+  instances: {{ .Values.cnp.instances }}
 
-  {{ if  or .Values.cnpMonitoring.customQueriesConfigMap .Values.cnpMonitoring.customQueriesSecret }}
+  {{ if  or .Values.cnp.monitoring.customQueriesConfigMap .Values.cnp.monitoring.customQueriesSecret }}
 
   monitoring:
     customQueriesConfigMap:
-    {{- range  .Values.cnpMonitoring.customQueriesConfigMap  }}
+    {{- range  .Values.cnp.monitoring.customQueriesConfigMap  }}
        - key: {{ .key }}
          name: {{ .name }}
     {{- end }}
 
     customQueriesSecret:
-    {{- range  .Values.cnpMonitoring.customQueriesSecret  }}
+    {{- range  .Values.cnp.monitoring.customQueriesSecret  }}
       - key: {{ .key }}
         name: {{ .name }}
     {{- end }}
@@ -41,18 +41,18 @@ spec:
   {{ end }}
 
   postgresql:
-    {{- with .Values.cnpPostgreSQLParameters }}
+    {{- with .Values.cnp.postgreSQLParameters }}
     parameters:
       {{- toYaml . | nindent 6 }}
     {{- end }}
   affinity:
-    {{- with .Values.cnpNodeSelector }}
+    {{- with .Values.cnp.nodeSelector }}
     nodeSelector:
       {{- toYaml . | nindent 6 }}
     {{- end }}
   storage:
-    {{- with .Values.cnpStorageClass }}
+    {{- with .Values.cnp.storage.storageClass }}
     storageClass: {{ . }}
     {{- end }}
-    size: {{ .Values.cnpSize }}
+    size: {{ .Values.cnp.storage.size }}
 {{- end }}

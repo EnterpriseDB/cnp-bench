@@ -1,6 +1,6 @@
 # pgbench-benchmark
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 
@@ -14,26 +14,26 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| cnpExisting | bool | `false` |  |
-| cnpExistingCredentials | string | `""` | The name of a Secret of type basic-auth containing the existing cluster credentials |
-| cnpExistingHost | string | `""` | The address of the existing cluster |
-| cnpImage | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
-| cnpInstances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
-| cnpMonitoring | object | `{"customQueriesConfigMap":[],"customQueriesSecret":[]}` | Configures custom queries for monitoring. The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries). Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/ |
-| cnpNodeSelector | object | `{"workload":"postgresql"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
-| cnpPostgreSQLParameters | object | `{"log_autovacuum_min_duration":"1s","log_checkpoints":"on","log_line_prefix":"%m [%p]: u=[%u] db=[%d] app=[%a] c=[%h] s=[%c:%l] tx=[%v:%x] ","log_lock_waits":"on","log_min_duration_statement":"1000","log_statement":"ddl","log_temp_files":"1024","maintenance_work_mem":"128MB","shared_buffers":"512MB"}` | Dictionary of key-value pairs representing PostgreSQL configuration. |
-| cnpSize | string | `"1Gi"` | The size of the PVCs used by CNP instances. |
-| cnpStorageClass | string | `""` | The storage class used to create PVCs for CNP instances. |
-| pgbenchClients | int | `1` | The number of clients used by pgbench. |
-| pgbenchJobs | int | `1` | The number of jobs used by pgbench. |
-| pgbenchNodeSelector | object | `{"workload":"pgbench"}` | Dictionary of key-value pairs used to define the nodes where the pgbench pod can run; used to avoid pgbench and PostgreSQL running on the same node. |
-| pgbenchScaleFactor | int | `1` | Scale factor used to initialize pgbench. |
-| pgbenchTime | int | `60` | The amount of seconds the pgbench will run for. |
-| pgbenchWarmTime | int | `0` | If >0, run an initContainer that runs pgbench for the defined amount of time (using the -T option) with the same clients and jobs that will be used for the main pgbench run; can be useful with storage classes that allow I/O bursts where could affect the actual benchmark result. |
-| pooler.instances | int | `0` | The number of pooler replicas that receive the connections. If >0 the benchmarks are run with connection pooling |
-| pooler.nodeSelector.workload | string | `"pooler"` |  |
-| pooler.pgbouncer.parameters | object | `{}` | PgBouncer configuration. |
-| pooler.pgbouncer.poolMode | string | `"session"` | The pool mode, accepted values: session, transaction |
+| cnp.cnpExistingCredentials | string | `""` | The name of a Secret of type basic-auth containing the existing cluster credentials |
+| cnp.cnpExistingHost | string | `""` | The address of the existing cluster |
+| cnp.existingCluster | bool | `false` | Whether the benchmark should be run against an existing cluster or a new one has to be created |
+| cnp.image | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
+| cnp.instances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
+| cnp.monitoring | object | `{"customQueriesConfigMap":[],"customQueriesSecret":[]}` | Configures custom queries for monitoring. The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries). Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/ |
+| cnp.nodeSelector | object | `{"workload":"postgresql"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
+| cnp.pooler.instances | int | `0` | The number of pooler replicas that receive the connections. If >0 the benchmarks are run with connection pooling |
+| cnp.pooler.nodeSelector.workload | string | `"pooler"` |  |
+| cnp.pooler.pgbouncer.parameters | object | `{}` | PgBouncer configuration. |
+| cnp.pooler.pgbouncer.poolMode | string | `"session"` | The pool mode, accepted values: session, transaction |
+| cnp.postgreSQLParameters | object | `{"log_autovacuum_min_duration":"1s","log_checkpoints":"on","log_lock_waits":"on","log_min_duration_statement":"1000","log_statement":"ddl","log_temp_files":"1024","maintenance_work_mem":"128MB","shared_buffers":"512MB"}` | Dictionary of key-value pairs representing PostgreSQL configuration. |
+| cnp.storage.size | string | `"1Gi"` | The size of the PVCs used by CNP instances. |
+| cnp.storage.storageClass | string | `""` | The storage class used to create PVCs for CNP instances. |
+| pgbench.clients | int | `1` | The number of clients used by pgbench. |
+| pgbench.jobs | int | `1` | The number of jobs used by pgbench. |
+| pgbench.nodeSelector | object | `{"workload":"pgbench"}` | Dictionary of key-value pairs used to define the nodes where the pgbench pod can run; used to avoid pgbench and PostgreSQL running on the same node. |
+| pgbench.scaleFactor | int | `1` | Scale factor used to initialize pgbench. |
+| pgbench.time | int | `60` | The amount of seconds the pgbench will run for. |
+| pgbench.warmTime | int | `0` | If >0, run an initContainer that runs pgbench for the defined amount of time (using the -T option) with the same clients and jobs that will be used for the main pgbench run; can be useful with storage classes that allow I/O bursts where could affect the actual benchmark result. |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)

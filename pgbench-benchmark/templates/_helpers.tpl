@@ -45,9 +45,43 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Service that we should connect to
 */}}
 {{- define "pgbench-benchmark.service" -}}
-{{- if .Values.cnpPoolerInstances -}}
+{{- if .Values.cnp.pooler.instances -}}
 pooler-{{ include "pgbench-benchmark.fullname" . }}
 {{- else -}}
 {{ include "pgbench-benchmark.fullname" . }}-rw
 {{- end -}}
 {{- end}}
+
+{{- define "pgbench-benchmark.credentials" -}}
+{{- if not .Values.cnp.existingCluster }}
+- name: PGHOST
+  value: {{ include "pgbench-benchmark.service" . }}
+- name: PGUSER
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "pgbench-benchmark.fullname" . }}-app
+      key: username
+- name: PGPASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "pgbench-benchmark.fullname" . }}-app
+      key: password
+{{- else -}}
+- name: PGHOST
+  value: {{ .Values.cnp.existingHost }}
+- name: PGDATABASE
+  value: {{ .Values.cnp.existingDatabase }}
+- name: PGPORT
+  value: {{ .Values.cnp.existingPort }}
+- name: PGUSER
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.cnp.existingCredentials }}
+      key: username
+- name: PGPASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.cnp.existingCredentials }}
+      key: password
+{{- end -}}
+{{- end }}

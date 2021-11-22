@@ -20,10 +20,10 @@ Benchmarking is focused on two aspects:
 
 `cnp-bench` comprises Helm charts for common benchmarking scenarios:
 
-* Running fio inside Kubernetes on a user-defined storage class;
-* Setting up a user-defined CNP cluster and running a pgbench job on it;
-* Setting up a CNP cluster and exposing it via a LoadBalancer allows
-  testing CNP from an external location (for example a VM outside Kubernetes).
+* Running `fio` inside Kubernetes on a user-defined storage class;
+* Running `pgbench` inside Kubernetes on:
+    * an existing PostgreSQL cluster (by passing a host, port, and/or database name)
+    * an *ad-hoc* CNP cluster, specifically created by the chart
 
 ## Requirements
 

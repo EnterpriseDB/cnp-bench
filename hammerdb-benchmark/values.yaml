@@ -74,68 +74,38 @@ hammerdb:
   nodeSelector:
     workload: hammerdb
   config:
-    pg_prewarm: false
+    # -- Whether we should prewarm all used tables before running `pgrun`
+    pg_prewarm: true
     pgschemabuild: |-
         #!/bin/tclsh
         puts "SETTING CONFIGURATION"
-        
-        global complete
-        proc wait_to_complete {} {
-        global complete
-        set complete [vucomplete]
-        if {!$complete} {after 5000 wait_to_complete} else { exit }
-        }
         
         dbset db pg
         diset connection pg_host $::env(PGHOST)
         diset tpcc pg_superuser $::env(PGSUPERUSER)
         diset tpcc pg_superuserpass $::env(PGSUPERUSERPASS)
-        #diset tpcc pg_user $::env(PGUSER)
-        #diset tpcc pg_pass $::env(PGPASSWORD)
-        #diset tpcc pg_dbase app
         #diset connection pg_port 5433
         diset tpcc pg_count_ware 800
         diset tpcc pg_num_vu 50
         #diset tpcc pg_partition false
         diset tpcc pg_driver timed
-        diset tpcc pg_storedprocs true
-        #diset tpcc pg_defaultdbase app
+        #diset tpcc pg_storedprocs true
         
         print dict
-        print script
         buildschema
-        wait_to_complete
+        waittocomplete
     pgrun: |-
         #!/bin/tclsh
-        proc runtimer { seconds } {
-        set x 0
-        set timerstop 0
-        while {!$timerstop} {
-        incr x
-        after 1000
-          if { ![ expr {$x % 60} ] } {
-                  set y [ expr $x / 60 ]
-                  puts "Timer: $y minutes elapsed"
-          }
-        update
-        if {  [ vucomplete ] || $x eq $seconds } { set timerstop 1 }
-            }
-        return
-        }
-        
         puts "SETTING CONFIGURATION"
         dbset db pg
         diset connection pg_host $::env(PGHOST)
-        #diset tpcc pg_user $::env(PGUSER)
-        #diset tpcc pg_pass $::env(PGPASSWORD)
-        #diset tpcc pg_dbase app
         diset tpcc pg_superuser $::env(PGSUPERUSER)
         diset tpcc pg_superuserpass $::env(PGSUPERUSERPASS)
         #diset tpcc pg_defaultdbase app
         diset tpcc pg_rampup 2
         diset tpcc pg_duration 25
         diset tpcc pg_vacuum true
-        diset tpcc pg_storedprocs true
+        #diset tpcc pg_storedprocs true
         print dict
         #vuset logtotemp 1
         loadscript

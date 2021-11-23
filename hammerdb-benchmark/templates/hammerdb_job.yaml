@@ -51,7 +51,7 @@ spec:
         command:
         - sh
         - -c
-        - psql tpcc "SELECT pg_prewarm('history');SELECT pg_prewarm('orders');SELECT pg_prewarm('customer');SELECT pg_prewarm('stock');"
+        - psql tpcc -c "CREATE EXTENSION pg_prewarm;SELECT pg_prewarm('history');SELECT pg_prewarm('orders');SELECT pg_prewarm('customer');SELECT pg_prewarm('stock');"
         {{- end }}
       containers:
       - name: hammerdb

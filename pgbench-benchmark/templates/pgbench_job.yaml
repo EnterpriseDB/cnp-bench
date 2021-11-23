@@ -31,6 +31,7 @@ spec:
         - sh
         - -c
         - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "pgbench-benchmark.service" . }}' sleep 15; done
+      {{ if or not .Values.cnp.existingCluster .Values.pgbench.initialize }}
       - name: pgbench-init
         image: {{ .Values.cnp.image }}
         env:
@@ -41,6 +42,7 @@ spec:
         - -i
         - -s
         - {{ .Values.pgbench.scaleFactor | quote }}
+      {{- end }}
       {{- if and ( .Values.pgbench.warmTime ) ( ne ( .Values.pgbench.warmTime | quote ) "0" )}}
       - name: pgbench-warm
         image: {{ .Values.cnp.image }}

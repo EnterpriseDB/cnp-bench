@@ -31,6 +31,7 @@ spec:
         - sh
         - -c
         - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "pgbench-benchmark.service" . }}' sleep 15; done
+      {{ if or (not .Values.cnp.existingCluster) (.Values.pgbench.initialize) }}
       - name: pgbench-init
         image: {{ .Values.cnp.image }}
         env:
@@ -38,9 +39,10 @@ spec:
         command:
         - pgbench
         args:
-        - -i
-        - -s
+        - --initialize
+        - --scale
         - {{ .Values.pgbench.scaleFactor | quote }}
+      {{- end }}
       {{- if and ( .Values.pgbench.warmTime ) ( ne ( .Values.pgbench.warmTime | quote ) "0" )}}
       - name: pgbench-warm
         image: {{ .Values.cnp.image }}
@@ -49,12 +51,18 @@ spec:
         command:
         - pgbench
         args:
-        - -T
+        - --time
         - {{ .Values.pgbench.warmTime | quote }}
-        - -c
+        - --client
         - {{ .Values.pgbench.clients | quote }}
-        - -j
+        - --jobs
         - {{ .Values.pgbench.jobs | quote }}
+        {{ if (.Values.pgbench.skipVacuum) }}
+        - --no-vacuum
+        {{- end }}
+        {{ if (.Values.pgbench.reportLatencies) }}
+        - --report-latencies
+        {{- end }}
       {{- end }}
       containers:
       - name: pgbench
@@ -64,12 +72,18 @@ spec:
         command:
         - pgbench
         args:
-        - -T
+        - --time
         - {{ .Values.pgbench.time | quote }}
-        - -c
+        - --client
         - {{ .Values.pgbench.clients | quote }}
-        - -j
+        - --jobs
         - {{ .Values.pgbench.jobs | quote }}
+        {{ if (.Values.pgbench.skipVacuum) }}
+        - --no-vacuum
+        {{- end }}
+        {{ if (.Values.pgbench.reportLatencies) }}
+        - --report-latencies
+        {{- end }}
       restartPolicy: Never
       {{- with .Values.pgbench.nodeSelector }}
       nodeSelector:

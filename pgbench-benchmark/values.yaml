@@ -76,7 +76,9 @@ pgbench:
   # running on the same node.
   nodeSelector:
     workload: pgbench
-  # -- Scale factor used to initialize pgbench.
+  # -- Invoke the initialization mode (TPC-B-like test scenario)
+  initialize: true
+  # -- Scale factor used to initialize pgbench (if initialize is set to true).
   scaleFactor: 1
   # -- The amount of seconds the pgbench will run for.
   time: 60
@@ -89,4 +91,10 @@ pgbench:
   # that will be used for the main pgbench run; can be useful with storage classes
   # that allow I/O bursts where could affect the actual benchmark result.
   warmTime: 0
+  # -- Perform no vacuuming before running the test.
+  skipVacuum: false
+  # -- Report the average per-statement latency (execution time from the
+  # perspective of the client) of each command after the benchmark finishes.
+  # See below for details
+  reportLatencies: false
 

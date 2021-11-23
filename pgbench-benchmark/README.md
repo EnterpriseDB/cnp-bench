@@ -19,7 +19,7 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 | cnp.existingDatabase | string | `""` | The port where PostgreSQL is listening on the specified host (default: 5432) |
 | cnp.existingHost | string | `""` | The address of the existing cluster (default: empty) |
 | cnp.existingPort | string | `""` | The name of the existing database (default: empty) |
-| cnp.image | string | `"quay.io/enterprisedb/postgresql:13.2"` | The PostgreSQL image used by CNP and PgBench. |
+| cnp.image | string | `"quay.io/enterprisedb/postgresql:14.1"` | The PostgreSQL image used by CNP and PgBench. |
 | cnp.instances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
 | cnp.monitoring | object | `{"customQueriesConfigMap":[],"customQueriesSecret":[]}` | Configures custom queries for monitoring. The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries). Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/ |
 | cnp.nodeSelector | object | `{"workload":"postgresql"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
@@ -31,9 +31,12 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 | cnp.storage.size | string | `"1Gi"` | The size of the PVCs used by CNP instances. |
 | cnp.storage.storageClass | string | `""` | The storage class used to create PVCs for CNP instances. |
 | pgbench.clients | int | `1` | The number of clients used by pgbench. |
+| pgbench.initialize | bool | `true` | Invoke the initialization mode (TPC-B-like test scenario) |
 | pgbench.jobs | int | `1` | The number of jobs used by pgbench. |
 | pgbench.nodeSelector | object | `{"workload":"pgbench"}` | Dictionary of key-value pairs used to define the nodes where the pgbench pod can run; used to avoid pgbench and PostgreSQL running on the same node. |
-| pgbench.scaleFactor | int | `1` | Scale factor used to initialize pgbench. |
+| pgbench.reportLatencies | bool | `false` | Report the average per-statement latency (execution time from the perspective of the client) of each command after the benchmark finishes. See below for details |
+| pgbench.scaleFactor | int | `1` | Scale factor used to initialize pgbench (if initialize is set to true). |
+| pgbench.skipVacuum | bool | `false` | Perform no vacuuming before running the test. |
 | pgbench.time | int | `60` | The amount of seconds the pgbench will run for. |
 | pgbench.warmTime | int | `0` | If >0, run an initContainer that runs pgbench for the defined amount of time (using the -T option) with the same clients and jobs that will be used for the main pgbench run; can be useful with storage classes that allow I/O bursts where could affect the actual benchmark result. |
 

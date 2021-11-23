@@ -1,0 +1,76 @@
+# Copyright 2021 EnterpriseDB Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "hammerdb-benchmark.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "hammerdb-benchmark.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-cnp
+        image: {{ .Values.cnp.image }}
+        env:
+          {{- include "hammerdb-benchmark.credentials" . | nindent 10 }}
+        command:
+        - sh
+        - -c
+        - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "hammerdb-benchmark.service" . }}' sleep 15; done
+      - name: hammerdb-pgschemabuild
+        image: {{ .Values.hammerdb.image }}
+        env:
+          {{- include "hammerdb-benchmark.credentials" . | nindent 10 }}
+        command:
+        - ./hammerdbcli
+        args:
+        - auto
+        - /hammerdb/pgschemabuild.tcl
+        volumeMounts:
+        - name: config-volume
+          mountPath: /hammerdb
+      {{- if .Values.hammerdb.config.pg_prewarm }}
+      - name: prewarm
+        image: {{ .Values.cnp.image }}
+        env:
+          {{- include "hammerdb-benchmark.credentials" . | nindent 10 }}
+        command:
+        - sh
+        - -c
+        - psql tpcc "SELECT pg_prewarm('history');SELECT pg_prewarm('orders');SELECT pg_prewarm('customer');SELECT pg_prewarm('stock');"
+        {{- end }}
+      containers:
+      - name: hammerdb
+        image: {{ .Values.hammerdb.image }}
+        env:
+          {{- include "hammerdb-benchmark.credentials" . | nindent 10 }}
+        command:
+        - sh
+        - -c
+        - ./hammerdbcli auto /hammerdb/pgrun.tcl 2>&1 | stdbuf -oL -eL sed -e "s,\x1B\[[0-9;]*[a-zA-Z],,g" -e "s,\r,,g" -e "s,hammerdb>,,g" -e "s,after\#[0-9]*,,g"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /hammerdb
+      restartPolicy: Never
+      {{- with .Values.hammerdb.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "hammerdb-benchmark.fullname" . }}-conf

@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "hammerdb-benchmark.fullname" . }}-conf
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "hammerdb-benchmark.labels" . | nindent 4 }}
+data:
+  pgschemabuild.tcl:
+  {{- toYaml .Values.hammerdb.config.pgschemabuild | nindent 6 }}
+  pgrun.tcl:
+  {{- toYaml .Values.hammerdb.config.pgrun | nindent 6 }}

@@ -22,7 +22,7 @@ A Helm chart that starts a CNP Cluster and executes a PgBench job on it.
 | cnp.image | string | `"quay.io/enterprisedb/postgresql:14.1"` | The PostgreSQL image used by CNP and PgBench. |
 | cnp.instances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
 | cnp.monitoring | object | `{"customQueriesConfigMap":[],"customQueriesSecret":[]}` | Configures custom queries for monitoring. The arrays accept a Dictionary made by name: string (resource name), key: string (resource data field containing the queries). Documentation on the accepted values: https://docs.enterprisedb.io/cloud-native-postgresql/latest/monitoring/ |
-| cnp.nodeSelector | object | `{"workload":"postgresql"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
+| cnp.nodeSelector | object | `{"workload":"postgres"}` | Dictionary of key-value pairs used to define the nodes where the cluster instances can run; used to avoid pgbench and PostgreSQL running on the same node. |
 | cnp.pooler.instances | int | `0` | The number of pooler replicas that receive the connections. If >0 the benchmarks are run with connection pooling |
 | cnp.pooler.nodeSelector.workload | string | `"pooler"` |  |
 | cnp.pooler.pgbouncer.parameters | object | `{}` | PgBouncer configuration. |

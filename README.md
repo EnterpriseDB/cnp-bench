@@ -128,7 +128,7 @@ kubectl wait --for=condition=complete -n NAMESPACE job/RELEASE_NAME-pgbench
 It is suggested to label nodes and use node selectors to avoid pgbench and
 PostgreSQL pods running on the same node. By default, the chart expects
 the nodes on which pgbench can run to be labelled with `workload: pgbench`
-and the node for CNP instances to be labelled with `workload: postgresql`.
+and the node for CNP instances to be labelled with `workload: postgres`.
 
 ``` sh
 kubectl label node/NODE_NAME workload:pgbench

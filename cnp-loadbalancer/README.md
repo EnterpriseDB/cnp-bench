@@ -18,7 +18,7 @@ Create a CNP cluster and expose it using a LoadBalancer. Used to test CNP from a
 | cnp.instances | int | `1` | The amount of PostgreSQL instances in the CNP Cluster. |
 | cnp.monitoring.customQueriesConfigMap | list | `[]` |  |
 | cnp.monitoring.customQueriesSecret | list | `[]` |  |
-| cnp.nodeSelector.workload | string | `"postgresql"` |  |
+| cnp.nodeSelector.workload | string | `"postgres"` |  |
 | cnp.pooler.instances | int | `0` | The number of pooler replicas that receive the connections. If >0 the benchmarks are run with connection pooling |
 | cnp.pooler.pgbouncer.parameters | object | `{}` | PgBouncer configuration. |
 | cnp.pooler.pgbouncer.poolMode | string | `"session"` | The pool mode, accepted values: session, transaction |

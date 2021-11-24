@@ -24,6 +24,9 @@ Benchmarking is focused on two aspects:
 * Running `pgbench` inside Kubernetes on:
     * an existing PostgreSQL cluster (by passing a host, port, and/or database name)
     * an *ad-hoc* CNP cluster, specifically created by the chart
+* Running `hammerdb` inside Kubernetes on:
+    * an existing PostgreSQL cluster (by passing a host and a superuser credentials)
+    * an *ad-hoc* CNP cluster, specifically created by the chart
 
 ## Requirements
 
@@ -111,7 +114,7 @@ in the `pgbench-benchmark` directory.
 It will:
 
 1. Create a CNP cluster based on the user-defined values;
-1. Execute a used-defined pgbench job on it.
+1. Execute a user-defined pgbench job on it.
 
 You can gather the results after the job is completed running:
 
@@ -152,6 +155,39 @@ latency average = 2.502 ms
 tps = 6395.218137 (including connections establishing)
 tps = 6395.231977 (excluding connections establishing)
 ```
+
+## HammerDB
+
+[HammerDB](https://www.hammerdb.com/) is the leading benchmarking and load
+testing software for the worlds most popular databases supporting Oracle
+Database, SQL Server, IBM Db2, MySQL, MariaDB and PostgreSQL. It supports both
+TPC-B and TPC-C benchmarks, the default configuration will run the latter.
+
+It will:
+
+1. Create a CNP cluster based on the user-defined values;
+1. Execute two user-defined scripts to run create the needed schema and the actual benchmark.
+
+Results will be outputted at the end of the pod's logs once completed.
+
+It is suggested to label nodes and use node selectors to avoid hammerdb and
+PostgreSQL pods running on the same node. By default, the chart expects
+the nodes on which pgbench can run to be labelled with `workload: hammerdb`
+and the node for CNP instances to be labelled with `workload: postgresql`.
+
+``` sh
+kubectl label node/NODE_NAME workload:hammerdb
+kubectl label node/OTHER_NODE_NAME workload:postgresql
+```
+
+Modify according to your needs the scripts in `hammerdb.pgschemabuild` and `hammerdb.pgrun`.
+Taking care to the following values in particular:
+- `pg_count_ware`
+- `pg_num_vu`
+- `pg_rampup`
+- `pg_duration`
+- the value `n` in `vuset vu n`
+- the value `x` in `runtimer x`
 
 ## CNP with LoadBalancer
 

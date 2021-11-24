@@ -74,8 +74,10 @@ hammerdb:
   nodeSelector:
     workload: hammerdb
   config:
-    # -- Whether we should prewarm all used tables before running `pgrun`
+    # -- Whether we should prewarm all used tables before running `pgrun` and
+    # after running `pgschemabuild`
     pg_prewarm: true
+    # -- The tcl script that will be run to populate the database
     pgschemabuild: |-
         #!/bin/tclsh
         puts "SETTING CONFIGURATION"

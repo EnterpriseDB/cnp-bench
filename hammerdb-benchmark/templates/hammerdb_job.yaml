@@ -31,6 +31,7 @@ spec:
         - sh
         - -c
         - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "hammerdb-benchmark.service" . }}' sleep 15; done
+      {{- if .Values.hammerdb.initialize }}
       - name: hammerdb-pgschemabuild
         image: {{ .Values.hammerdb.image }}
         env:
@@ -43,6 +44,7 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /hammerdb
+      {{- end }}
       {{- if .Values.hammerdb.config.pg_prewarm }}
       - name: prewarm
         image: {{ .Values.cnp.image }}

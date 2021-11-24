@@ -84,41 +84,30 @@ hammerdb:
         diset connection pg_host $::env(PGHOST)
         diset tpcc pg_superuser $::env(PGSUPERUSER)
         diset tpcc pg_superuserpass $::env(PGSUPERUSERPASS)
-        #diset connection pg_port 5433
-        diset tpcc pg_count_ware 800
-        diset tpcc pg_num_vu 50
-        #diset tpcc pg_partition false
+        #diset connection pg_port 5432
+        diset tpcc pg_count_ware 8
+        diset tpcc pg_num_vu 2
+        diset tpcc pg_raiseerror true
         diset tpcc pg_driver timed
-        #diset tpcc pg_storedprocs true
-        
         print dict
         buildschema
         waittocomplete
     pgrun: |-
         #!/bin/tclsh
-        puts "SETTING CONFIGURATION"
         dbset db pg
         diset connection pg_host $::env(PGHOST)
         diset tpcc pg_superuser $::env(PGSUPERUSER)
         diset tpcc pg_superuserpass $::env(PGSUPERUSERPASS)
-        #diset tpcc pg_defaultdbase app
-        diset tpcc pg_rampup 2
-        diset tpcc pg_duration 25
+        diset tpcc pg_rampup 0
+        diset tpcc pg_duration 1
         diset tpcc pg_vacuum true
-        #diset tpcc pg_storedprocs true
         print dict
-        #vuset logtotemp 1
+        vuset logtotemp 1
         loadscript
         print script
-        puts "SEQUENCE STARTED"
-        foreach z { 1 16 32 64 128 256 512 } {
-          puts "$z VU TEST"
-          vuset vu $z
-          vucreate
-          vurun
-          runtimer [expr 2 * 60 + 25 * 60 + 120 * 60]
-          vudestroy
-          after 5000
-        }
-        puts "TEST SEQUENCE COMPLETE"
+        vuset vu 1
+        vucreate
+        vurun
+        runtimer 1200
+        vudestroy
         exit

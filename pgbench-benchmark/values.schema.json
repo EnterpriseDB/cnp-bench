@@ -120,6 +120,9 @@
                 "clients": {
                     "type": "integer"
                 },
+                "initialize": {
+                    "type": "boolean"
+                },
                 "jobs": {
                     "type": "integer"
                 },
@@ -131,8 +134,14 @@
                         }
                     }
                 },
+                "reportLatencies": {
+                    "type": "boolean"
+                },
                 "scaleFactor": {
                     "type": "integer"
+                },
+                "skipVacuum": {
+                    "type": "boolean"
                 },
                 "time": {
                     "type": "integer"

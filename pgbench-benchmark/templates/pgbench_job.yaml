@@ -51,8 +51,6 @@ spec:
         command:
         - pgbench
         args:
-        - --scale
-        - {{ .Values.pgbench.scaleFactor | quote }}
         - --time
         - {{ .Values.pgbench.warmTime | quote }}
         - --client
@@ -74,8 +72,6 @@ spec:
         command:
         - pgbench
         args:
-        - --scale
-        - {{ .Values.pgbench.scaleFactor | quote }}
         - --time
         - {{ .Values.pgbench.time | quote }}
         - --client

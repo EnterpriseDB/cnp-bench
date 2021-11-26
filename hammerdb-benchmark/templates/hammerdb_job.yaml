@@ -31,7 +31,7 @@ spec:
         - sh
         - -c
         - until psql -c "SELECT 1"; do echo 'Waiting for {{ include "hammerdb-benchmark.service" . }}' sleep 15; done
-      {{- if .Values.hammerdb.initialize }}
+      {{- if .Values.hammerdb.config.initialize }}
       - name: hammerdb-pgschemabuild
         image: {{ .Values.hammerdb.image }}
         env:
@@ -53,7 +53,7 @@ spec:
         command:
         - sh
         - -c
-        - psql tpcc -c "CREATE EXTENSION pg_prewarm;SELECT pg_prewarm('history');SELECT pg_prewarm('orders');SELECT pg_prewarm('customer');SELECT pg_prewarm('stock');"
+        - psql tpcc -c "CREATE EXTENSION IF NOT EXISTS pg_prewarm;SELECT pg_prewarm('history');SELECT pg_prewarm('orders');SELECT pg_prewarm('customer');SELECT pg_prewarm('stock');"
         {{- end }}
       containers:
       - name: hammerdb

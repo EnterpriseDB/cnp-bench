@@ -1,0 +1,26 @@
+{{ if and .Values.cnp.pooler.instances (not .Values.cnp.existingCluster) }}
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: Pooler
+metadata:
+  name: pooler-{{ include "hammerdb-benchmark.fullname" . }}
+  labels:
+  {{- include "hammerdb-benchmark.labels" . | nindent 4 }}
+spec:
+  cluster:
+    name: {{ include "hammerdb-benchmark.fullname" . }}
+  instances: {{ .Values.cnp.pooler.instances }}
+  type: rw
+  pgbouncer:
+    poolMode: {{ .Values.cnp.pooler.pgbouncer.poolMode}}
+    {{- with .Values.cnp.pooler.pgbouncer.parameters }}
+    parameters:
+      {{- toYaml . | nindent 6 }}
+    {{ end }}
+  template:
+    spec:
+      containers: []
+      {{- with .Values.cnp.pooler.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{ end }}
+{{ end }}

@@ -1,0 +1,26 @@
+{{ if .Values.cnp.nodeSelector -}}
+Make sure at least a node has the following labels to be able to schedule the
+{{ include "hammerdb-benchmark.fullname" . }} CNP cluster:
+{{- toYaml .Values.cnp.nodeSelector | nindent 2}}
+{{- end }}
+
+{{ if .Values.hammerdb.nodeSelector -}}
+Make sure at least a node has the following labels to be able to schedule the
+{{ include "hammerdb-benchmark.fullname" . }} job running hammerdb:
+{{- toYaml .Values.hammerdb.nodeSelector | nindent 2}}
+{{- end }}
+
+{{ if .Values.cnp.pooler.instances -}}
+The benchmark is being run with connection pooling.
+Make sure at least a node has the following labels to be able to schedule the
+pooler-{{ include "hammerdb-benchmark.fullname" . }} pooler:
+{{- toYaml .Values.cnp.pooler.nodeSelector | nindent 2}}
+{{ end }}
+
+After the {{ include "hammerdb-benchmark.fullname" . }} job completes run
+
+  kubectl logs -n {{ .Release.Namespace }} job/{{ include "hammerdb-benchmark.fullname" . }}
+
+to gather the hammerdb results. You can then uninstall the chart
+
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}

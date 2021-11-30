@@ -1,38 +1,19 @@
 # Benchmarking Cloud Native PostgreSQL
 
-`cnp-bench` provides a set of guidelines for benchmarking
-[Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) by
-[EDB](https://enterprisedb.com/) in a controlled environment before
-deploying the database in production.
-Cloud Native PostgreSQL is a Kubernetes operator for
-[PostgreSQL](https://www.postgresql.org/) and
-[EDB Postgres Advanced](https://www.enterprisedb.com/products/edb-postgres-advanced-server-secure-ha-oracle-compatible).
+`cnp-bench` provides a bundle of helm charts designed for benchmarking a PostgreSQL deployment in Kubernetes,
+in a controlled, non-production environment. This guide is currently designed and tested to run `cnp-bench`
+on a [Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) by [EDB](https://enterprisedb.com/).
 
-`cnp-bench` comprises Helm charts for each of the needed benchmarking
-scenarios.
+Benchmarking is focused on two aspects:
+
+- the **storage**, by relying on [fio](https://fio.readthedocs.io/en/latest/fio_doc.html)
+- the **database**, by relying on either [pgbench](https://www.postgresql.org/docs/current/pgbench.html),
+  PostgreSQL's default benchmarking application, or [HammerDB](https://www.hammerdb.com/docs/).
 
 **IMPORTANT:** `cnp-bench` must be run in a staging or pre-production
 environment. Do not use `cnp-bench` in a production environment, as it
 might have catastrophic consequences on your databases and the other
 workloads/applications that run in the same shared environment.
-
-Benchmarking is focused on two aspects:
-
-- the **storage**, which is one of the most critical components for PostgreSQL, by
-  relying on [fio](https://fio.readthedocs.io/en/latest/fio_doc.html)
-- the **database**, by relying on either [pgbench](https://www.postgresql.org/docs/current/pgbench.html),
-  PostgreSQL's default benchmarking application, or [HammerDB](https://www.hammerdb.com/docs/).
-
-`cnp-bench` also integrates with [cnp-sandbox](https://github.com/EnterpriseDB/cnp-sandbox),
-a set of Helm charts that installs Prometheus, Grafana, and Cloud Native
-PostgreSQL in your staging/pre-production Kubernetes cluster.
-Although it is not required, for better observability outcomes we recommend
-that you install `cnp-sandbox` prior to running any benchmark.
-
-While `cnp-bench` is primarily designed and tested to run with Cloud Native
-PostgreSQL, you can use it to run benchmarks for any PostgreSQL deployment in
-Kubernetes. This document however is currently focused on running `cnp-bench`
-with Cloud Native PostgreSQL.
 
 ## Requirements
 
@@ -58,28 +39,21 @@ First, you need to clone the main repository:
 git clone git@github.com:EnterpriseDB/cnp-bench.git
 cd cnp-bench
 ```
-
-Each benchmark is managed by a different chart. For example, to run the `fio`
-benchmark, you need to install the chart located in the `fio-benchmark` folder.
-Please refer to the specific sections below for details on each scenario.
-
 You can install a chart by defining a "Release Name" that will be used to
 identify the resources and running:
 
 ``` sh
 helm install RELEASE_NAME path/to/chart/dir
 ```
+Please note that each benchmark is managed by a different chart that is located in a different folder.
 
-You can override the default settings included in the `values.yaml` file of a
-chart using the `--values` or `--set` options of `helm install`.
+For example, to run the `fio` benchmark, you need to install the chart located in the `fio-benchmark` folder.
+Please refer to the specific sections below for details on each scenario.
 
-For example, if you want to configure the run of a `pgbench` benchmark, copy
-the `pgbench-benchmark/values.yaml` file somewhere on your machine (e.g.
-`my-pgbench-values.yaml`), and edit it. Then pass it to Helm by specifying
-`--values my-pgbench-values.yaml`.
-
-More details are available in the
-[Helm install documentation](https://helm.sh/docs/helm/helm_install/#helm-install).
+You can override the default settings included in the `values.yaml` file of a chart using the `--values` or `--set` options of `helm install` or
+by passing the whole yaml configuration file with the`--values` argument.
+You can obtain a configuration file by copying the values.yml contained in your chosen chart and use it as a starting point.
+More details are available in the [Helm install documentation](https://helm.sh/docs/helm/helm_install/#helm-install).
 See the `README.md` file included in each chart for the available parameters.
 
 You can verify the installed helm charts with:
@@ -99,10 +73,8 @@ helm uninstall RELEASE_NAME
 ![Transactions dashboard in Grafana](images/cnp-sandbox-transactions.png)
 
 `cnp-sandbox` will deploy in your selected Kubernetes cluster Prometheus,
-Grafana, Cloud Native PostgreSQL, as well as a sample dashboard for Granana and
-a sample set of metrics. It is recommended to have it installed if you are
-planning to observe your systems in Grafana and enhance the learning capabilities
-of your experiments..
+Grafana, CNP, as well as a sample dashboard for Granana based on
+a sample set of metrics exposed by CNP Clusters.
 
 For more information, please refer to the [main Github repository of
 `cnp-sandbox`](https://github.com/EnterpriseDB/cnp-sandbox).

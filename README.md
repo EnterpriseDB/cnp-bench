@@ -1,71 +1,66 @@
 # Benchmarking Cloud Native PostgreSQL
 
-`cnp-bench` provides a set of guidelines for benchmarking
-[Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) by
-[EDB](https://enterprisedb.com/) in a controlled environment before
-deploying the database in production.
-Cloud Native PostgreSQL is a Kubernetes operator for
-[PostgreSQL](https://www.postgresql.org/) and
-[EDB Postgres Advanced](https://www.enterprisedb.com/products/edb-postgres-advanced-server-secure-ha-oracle-compatible).
+`cnp-bench` provides a bundle of helm charts designed for benchmarking a PostgreSQL deployment in Kubernetes,
+in a controlled, non-production environment. This guide is currently designed and tested to run `cnp-bench`
+on a [Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) Cluster by [EDB](https://enterprisedb.com/).
+
+Benchmarking is focused on two aspects:
+
+- the **storage**, by relying on [fio](https://fio.readthedocs.io/en/latest/fio_doc.html)
+- the **database**, by relying on either [pgbench](https://www.postgresql.org/docs/current/pgbench.html),
+  PostgreSQL's default benchmarking application, or [HammerDB](https://www.hammerdb.com/docs/).
 
 **IMPORTANT:** `cnp-bench` must be run in a staging or pre-production
 environment. Do not use `cnp-bench` in a production environment, as it
 might have catastrophic consequences on your databases and the other
 workloads/applications that run in the same shared environment.
 
-Benchmarking is focused on two aspects:
-
-- the storage, which is one of the most critical components for PostgreSQL, by relying on `fio`
-- the database itself, by relying on `pgbench`, PostgreSQL's default benchmarking application
-
-`cnp-bench` comprises Helm charts for common benchmarking scenarios:
-
-* Running `fio` inside Kubernetes on a user-defined storage class;
-* Running `pgbench` inside Kubernetes on:
-    * an existing PostgreSQL cluster (by passing a host, port, and/or database name)
-    * an *ad-hoc* CNP cluster, specifically created by the chart
-* Running `hammerdb` inside Kubernetes on:
-    * an existing PostgreSQL cluster (by passing a host and a superuser credentials)
-    * an *ad-hoc* CNP cluster, specifically created by the chart
-
 ## Requirements
 
 * A running Kubernetes cluster;
-* A working connection to the cluster via `kubectl`;
-* The Cloud Native PostgreSQL operator must already be installed on the cluster, manifests are
-  available at [get.enterprisedb.io](https://get.enterprisedb.io/cnp/)
-  and can be installed running:
+* A working connection to the Kubernetes cluster via `kubectl`;
+* Helm should be installed locally (see the
+  ["Installing Helm" documentation page](https://helm.sh/docs/intro/install/));
+* Access, within Kubernetes, to the PostgreSQL cluster you want to benchmark.
 
-  ``` sh
-  kubectl apply -f https://get.enterprisedb.io/cnp/postgresql-operator-VERSION.yaml
-  ```
-  * Take a look at [cnp-sandbox](https://github.com/EnterpriseDB/cnp-sandbox) for an all-in-one Helm chart
-    that installs Cloud Native PostgreSQL with the monitoring stack needed by the provided Grafana Dashboard.
+As far as the latter is concerned, you might need to install the CNP operator
+if you are planning to run benchmarks on disposable Postgres clusters that
+exist for the sole duration of the test.
+Consider that, if you install
+[cnp-sandbox](https://github.com/EnterpriseDB/cnp-sandbox), the CNP operator
+will be installed together with the monitoring stack comprising Grafana,
+Prometheus and default metrics. This is our recommended approach.
 
-* Helm should be installed locally, see the
-  ["Installing Helm" documentation page](https://helm.sh/docs/intro/install/).
+## Installing the `cnp-bench` Helm charts
 
-## Installing the Helm charts
-
-Clone the repository:
+First, you need to clone the main repository:
 
 ```
 git clone git@github.com:EnterpriseDB/cnp-bench.git
 cd cnp-bench
 ```
-
 You can install a chart by defining a "Release Name" that will be used to
 identify the resources and running:
 
 ``` sh
 helm install RELEASE_NAME path/to/chart/dir
 ```
+Please note that each benchmark is managed by a different chart that is located in a different folder.
 
-You can override the default settings included in the `values.yaml` file of a
-chart using the `--values` or `--set` options of `helm install`.
-More details are available in the
-[Helm install documentation](https://helm.sh/docs/helm/helm_install/#helm-install).
+For example, to run the `fio` benchmark, you need to install the chart located in the `fio-benchmark` folder.
+Please refer to the specific sections below for details on each scenario.
+
+You can override the default settings included in the `values.yaml` file of a chart using the `--values` or `--set` options of `helm install` or
+by passing the whole yaml configuration file with the`--values` argument.
+You can obtain a configuration file by copying the values.yml contained in your chosen chart and use it as a starting point.
+More details are available in the [Helm install documentation](https://helm.sh/docs/helm/helm_install/#helm-install).
 See the `README.md` file included in each chart for the available parameters.
+
+You can verify the installed helm charts with:
+
+``` sh
+helm list
+```
 
 Resources created by a chart can be removed running:
 
@@ -73,7 +68,18 @@ Resources created by a chart can be removed running:
 helm uninstall RELEASE_NAME
 ```
 
-## fio benchmark
+## Installing `cnp-sandbox`
+
+![Transactions dashboard in Grafana](images/cnp-sandbox-transactions.png)
+
+`cnp-sandbox` will deploy in your selected Kubernetes cluster Prometheus,
+Grafana, CNP, as well as a sample dashboard for Granana based on
+a sample set of metrics exposed by CNP Clusters.
+
+For more information, please refer to the [main Github repository of
+`cnp-sandbox`](https://github.com/EnterpriseDB/cnp-sandbox).
+
+## Benchmarking the storage with `fio`
 
 The chart is contained in the `fio-benchmark` directory.
 
@@ -96,25 +102,42 @@ kubectl port-forward -n NAMESPACE deployment/RELEASE_NAME 8000
 and then use a browser and connect to `http://localhost:8000/` to get the data.
 
 The default 8k block size has been chosen to emulate a PostgreSQL workload.
-Disk that cap the amount of available IOPS can show very different throughput
+Disks that cap the amount of available IOPS can show very different throughput
 values changing this parameter.
 
 Below is an example of diagram of sequential writes on a local disk
 mounted on a `Standard_E8ds_v4` dedicated Kubernetes node on Azure
 (1 hour benchmark):
 
-![Sequential writes bandwidth](write_bw.1-2Draw.png)
+![Sequential writes bandwidth](images/write_bw.1-2Draw.png)
 
-## pgbench
+
+## Benchmarking the database with `pgbench`
 
 [pgbench](https://www.postgresql.org/docs/current/pgbench.html) is the default
 benchmarking application for PostgreSQL. The chart for `pgbench` is contained
 in the `pgbench-benchmark` directory.
 
-It will:
+You can run a `pgbench` benchmark on:
+
+- a disposable PostgreSQL cluster created by the CNP operator specifically for
+  the benchmark
+- an existing PostgreSQL cluster, by providing connection information (host,
+  port, database name, and user)
+
+The `cnp.existingCluster` option is the one that controls the above behavior.
+
+While running a job on a cluster that lives for the sole duration of the test
+is useful, we recommend that you first create your PostgreSQL cluster, possibly
+with `cnp-sandbox` installed, and then run `pgbench` on that cluster as explained
+in the "Running `pgbench` on an existing Postgres cluster" section below.
+
+### Running `pgbench` on a disposable CNP cluster
+
+When `cnp.existingCluster` is set to `false` (default), the chart will:
 
 1. Create a CNP cluster based on the user-defined values;
-1. Execute a user-defined pgbench job on it.
+1. Execute a user-defined `pgbench` job on it.
 
 You can gather the results after the job is completed running:
 
@@ -156,32 +179,92 @@ tps = 6395.218137 (including connections establishing)
 tps = 6395.231977 (excluding connections establishing)
 ```
 
+#### Adding a connection pooler
+
+CNP has native support for the PgBouncer pooler. You can create a database
+access layer with PgBouncer by managing the `cnp.pooler` section of the values
+file. By default, PgBouncer will be placed on those nodes with the `workload:
+pooler` label.
+
+Look at the `pgbench-benchmark/values.yaml` for an example, as well as the CNP
+documentation for more information on the PgBouncer implementation.
+
+### Running `pgbench` on an existing Postgres cluster
+
+Suppose you already have your PostgreSQL database setup (not necessarily with CNP).
+You can use `cnp-bench` to run a `pgbench` test.
+
+
+``` yaml
+cnp:
+  existingCluster: true
+  # Name of the host (or service in K8s) or IP address where Postgres is running
+  existingHost: mydb
+  # You need to point `existingCredentials` to a Kubernetes `basic-auth`secret
+  # containing username and password to connect to the database
+  existingCredentials: mydb-app
+  # Name of the database on which to run pgbench
+  existingDatabase: pgbench
+
+pgbench:
+  # Node where to run pgbench
+  nodeSelector:
+    workload: pgbench
+  initialize: true
+  scaleFactor: 1
+  time: 60
+  clients: 1
+  jobs: 1
+  skipVacuum: false
+  reportLatencies: false
+```
+
+The `cnp` section above, points to the existing database.
+
+The `pgbench` setion contains the parameters you can use to run the `pgbench` job.
+For example, you can create a job that initializes only the `pgbench` database
+for a given scale (e.g. 7000, corresponding to roughly 95GB-100GB of database
+size), then create another one that only runs the job, with different settings
+of clients, time and jobs.
+
+
 ## HammerDB
 
 [HammerDB](https://www.hammerdb.com/) is the leading benchmarking and load
-testing software for the worlds most popular databases supporting Oracle
-Database, SQL Server, IBM Db2, MySQL, MariaDB and PostgreSQL. It supports both
-TPC-B and TPC-C benchmarks, the default configuration will run the latter.
+testing software for the world's most popular databases supporting Oracle
+Database, SQL Server, IBM Db2, MySQL, MariaDB and PostgreSQL.
 
-It will:
+`cnp-bench` by default will run the TPROC-C benchmark, that is the OLTP
+workload implemented in HammerDB derived from the TPC-C specification with
+modification to make running HammerDB straightforward and cost-effective on any
+of the supported database environments. The HammerDB TPROC-C workload is an
+open source workload derived from the TPC-C Benchmark Standard and as such is
+not comparable to published TPC-C results, as the results comply with a subset
+rather than the full TPC-C Benchmark Standard.
+The name for the HammerDB workload TPROC-C means "Transaction Processing
+Benchmark derived from the TPC "C" specification".
 
-1. Create a CNP cluster based on the user-defined values;
-1. Execute two user-defined scripts to run create the needed schema and the actual benchmark.
+Similarly to the case of `pgbench`, you can run HammerDB on a disposable CNP cluster.
+We won't report instructions here as they are identical to the `pgbench` case.
+Also in this case we recommend that you run the test on a previously
+created Postgres cluster (with CNP or another operator/method).
 
-Results will be outputted at the end of the pod's logs once completed.
 
-It is suggested to label nodes and use node selectors to avoid hammerdb and
-PostgreSQL pods running on the same node. By default, the chart expects
-the nodes on which pgbench can run to be labelled with `workload: hammerdb`
-and the node for CNP instances to be labelled with `workload: postgresql`.
+Make a local copy of the `hammerdb-benchmark/values.yaml` file, and make sure
+you set the `existingSuperuserCredentials` option to the Kubernetes secret
+containing the superuser password.
 
-``` sh
-kubectl label node/NODE_NAME workload:hammerdb
-kubectl label node/OTHER_NODE_NAME workload:postgresql
+```yaml
+cnp:
+  existingCluster: true
+  existingSuperuserCredentials: mydb-superuser
+  existingHost: mydb
 ```
 
-Modify according to your needs the scripts in `hammerdb.pgschemabuild` and `hammerdb.pgrun`.
-Taking care to the following values in particular:
+Then look at the `hammerdb` section on possible ways to customize the test.
+In particular, modify the scripts in `hammerdb.pgschemabuild` and
+`hammerdb.pgrun`, by taking care of the following options:
+
 - `pg_count_ware`
 - `pg_num_vu`
 - `pg_rampup`
@@ -189,36 +272,18 @@ Taking care to the following values in particular:
 - the value `n` in `vuset vu n`
 - the value `x` in `runtimer x`
 
-## CNP with LoadBalancer
+As reported in the [HammerDB documentation](https://www.hammerdb.com/docs/ch03s07.html),
+a good starting rule is to set `pg_num_vu` and `vu` to the number of cores
+available on Postgres, while `pg_count_ware` to 4/5 times the same value.
 
-The chart is contained in the `cnp-loadbalancer` directory.
-
-No benchmark is run in this scenario. We just create a CNP cluster and expose
-its primary via a LoadBalancer. The idea is allowing an external application
-to run any kind of benchmark on the underlying PostgreSQL instance.
-
-The chart will:
-
-1. Create a CNP cluster based on the user-defined values;
-1. Expose the primary using a LoadBalancer.
-
-You can get the password used by the `app` user to connect to the `app` database
-running:
+It is suggested to label nodes and use node selectors to avoid HammerDB and
+PostgreSQL pods running on the same node. By default, the chart expects
+the nodes on which pgbench can run to be labelled with `workload: hammerdb`
+and the node for CNP instances to be labelled with `workload: postgresql`.
 
 ``` sh
-kubectl get secrets -n NAMESPACE RESOURCE_NAME-app -o jsonpath='{.data.password}' | tr -d '\n' | base64 -d
-```
-
-You get also get a `.pgpass` file with:
-
-``` sh
-kubectl get secrets -n NAMESPACE RESOURCE_NAME-app -o jsonpath='{.data.pgpass}' | tr -d '\n' | base64 -d
-```
-
-You can find The IP of the LoadBalancer exposing PostgreSQL with:
-
-``` sh
-kubectl get services -n NAMESPACE RESOURCE_NAME -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+kubectl label node/NODE_NAME workload=hammerdb
+kubectl label node/OTHER_NODE_NAME workload=postgresql
 ```
 
 ## Contributing

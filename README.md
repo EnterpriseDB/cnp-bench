@@ -2,7 +2,7 @@
 
 `cnp-bench` provides a bundle of helm charts designed for benchmarking a PostgreSQL deployment in Kubernetes,
 in a controlled, non-production environment. This guide is currently designed and tested to run `cnp-bench`
-on a [Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) by [EDB](https://enterprisedb.com/).
+on a [Cloud Native PostgreSQL (CNP)](https://docs.enterprisedb.io/) Cluster by [EDB](https://enterprisedb.com/).
 
 Benchmarking is focused on two aspects:
 
@@ -222,7 +222,7 @@ pgbench:
 The `cnp` section above, points to the existing database.
 
 The `pgbench` setion contains the parameters you can use to run the `pgbench` job.
-You can for example create a job that initializes only the `pgbench` database
+For example, you can create a job that initializes only the `pgbench` database
 for a given scale (e.g. 7000, corresponding to roughly 95GB-100GB of database
 size), then create another one that only runs the job, with different settings
 of clients, time and jobs.
@@ -246,7 +246,7 @@ Benchmark derived from the TPC "C" specification".
 
 Similarly to the case of `pgbench`, you can run HammerDB on a disposable CNP cluster.
 We won't report instructions here as they are identical to the `pgbench` case.
-Even in the case for HammerDB we recommend that you run the test on a previously
+Also in this case we recommend that you run the test on a previously
 created Postgres cluster (with CNP or another operator/method).
 
 
@@ -282,8 +282,8 @@ the nodes on which pgbench can run to be labelled with `workload: hammerdb`
 and the node for CNP instances to be labelled with `workload: postgresql`.
 
 ``` sh
-kubectl label node/NODE_NAME workload:hammerdb
-kubectl label node/OTHER_NODE_NAME workload:postgresql
+kubectl label node/NODE_NAME workload=hammerdb
+kubectl label node/OTHER_NODE_NAME workload=postgresql
 ```
 
 ## Contributing

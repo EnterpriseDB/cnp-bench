@@ -26,10 +26,12 @@ workloads/applications that run in the same shared environment.
 As far as the latter is concerned, you might need to install the CNP operator
 if you are planning to run benchmarks on disposable Postgres clusters that
 exist for the sole duration of the test.
-Consider that, if you install
+Consider that, if you *install
 [cnp-sandbox](https://github.com/EnterpriseDB/cnp-sandbox), the CNP operator
 will be installed together with the monitoring stack comprising Grafana,
 Prometheus and default metrics. This is our recommended approach.
+
+* The above installation method applies to Kubernetes clusters and not Openshift Clusters.
 
 ## Installing the `cnp-bench` Helm charts
 

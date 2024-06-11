@@ -1,3 +1,6 @@
+# THIS PROJECT HAS BEEN ARCHIVED AND IS NO LONGER UPDATED
+# PLEASE REFER TO THE OPERATOR DOCUMENTATION FOR THE NEW WAY TO RUN BENCHMARKS
+
 # Benchmarking Cloud Native PostgreSQL
 
 `cnp-bench` provides a bundle of helm charts designed for benchmarking a PostgreSQL deployment in Kubernetes,

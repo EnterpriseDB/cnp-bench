@@ -1,3 +1,11 @@
+# THIS PROJECT HAS BEEN ARCHIVED AND IS NO LONGER UPDATED
+### PLEASE REFER TO THE OPERATOR DOCUMENTATION FOR THE CURRENT WAY TO RUN BENCHMARKS
+
+* ["Benchmarking" page of the CloudNativePG open source project](https://cloudnative-pg.io/documentation/current/benchmarking/)
+* ["Benchmarking" page for EDB Postgres for Kubernetes](https://www.enterprisedb.com/docs/postgres_for_kubernetes/latest/benchmarking/)
+
+---
+
 # Benchmarking Cloud Native PostgreSQL
 
 `cnp-bench` provides a bundle of helm charts designed for benchmarking a PostgreSQL deployment in Kubernetes,
